@@ -1,0 +1,180 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{enumerate}
+\usepackage{nopageno}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage{comment}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{changepage}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\setcounter{MaxMatrixCols}{30}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{mdframed}
+\usepackage{tcolorbox}
+\newcommand{\rd}[1]{{\textcolor{red}{#1}}}
+\newcommand{\ph}{\phantom{-}}
+\newcommand{\pp}{\phantom{-1}}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{mathpazo}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+%\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}
+%\usepackage{hyperref}       % This one with red boxes arounded, the above one does not
+\usepackage{url}            % simple URL typesetting
+\newtheorem{definition}{Definition}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+%\usepackage{lipsum}		% Can be removed after putting your text content
+%\usepackage{natbib}
+%\usepackage{doi}
+%\setcitestyle{aysep={,}}
+\newtcolorbox{theo}{colback=red!5!white,colframe=red!75!black,left=5pt,right=5pt,top=2pt,bottom=2pt,}
+
+\newtcolorbox{tip}{colback=blue!5!white,colframe=blue!75!black,left=5pt,right=5pt,top=2pt,bottom=2pt,}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\titleformat*{\section}{\large\bfseries}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={blue!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\pagestyle {fancy}
+\title{APEC R Review 2023 Summer}
+\author{Instructor: Lifeng Ren}
+\date{August 14, 2023 to August 18, 2023}
+\lhead{R Review-Syllabus}
+\chead{Lifeng Ren}
+\rhead{2023 Summer}
+
+
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+{\LARGE \textsc{Introduction to R Statistical Analysis Software}}
+\end{center}
+\begin{center}
+\large \textsc{Syllabus}\\
+Summer 2023(August 14, 2023 - August 18, 2023)
+\end{center}
+%\date{September 26, 2014}
+
+\begin{center}
+\rule{6.5in}{0.4pt}
+\begin{tabular}{llll}
+\textbf{Instructor:} & Lifeng Ren &   \textbf{Time:} & 1PM-4PM, Central Time \\
+\textbf{Email:} &\href{mailto:ren00154@umn.edu}{ren00154@umn.edu}  &   \textbf{Place:} & Ruttan 135B and \href{https://umn.zoom.us/j/96218181588?pwd=ZFVrdWQ0bkZyb2N2Wkdwc0JnUk9CQT09}{Zoom}\\
+\textbf{Office Hours:} & After class: 4PM-5PM; Ruttan 135B\& \href{https://umn.zoom.us/j/96218181588?pwd=ZFVrdWQ0bkZyb2N2Wkdwc0JnUk9CQT09}{Zoom}&
+\end{tabular}
+\rule{6.5in}{0.4pt}
+\end{center}
+
+\section*{Course Description}
+This course is a preliminary introduction to the R statistical software, specifically tailored for new graduate students. 
+All the lecture materials will be provided on the Github Repository (\href{https://github.com/lfr00154/R-review2023}{Here:To be Published Later}), and on Canvas. 
+\begin{itemize}
+    \item Rather than encompassing every aspect of R, the course aims to provide a strong groundwork for Econometric Analysis (APEC8211- 8212). 
+    \item Programming for Econometrics (APEC8221), and Big Data Methods in Economics (APEC8222) are the classes you might want to register if you want to learn more about coding in R and Python. 
+    \item The teaching goal of this class is to provide everyone with solid R-programming foundation for the first-year PhD Econometrics Class. After this class, you should be able to:
+    \begin{itemize}
+        \item Code in IDE (R-studio) with both R-scripts, and R-markdown.
+        \item Understand the data types and how to save and acess to the data in R.
+        \item Obtain basic data cleaning and manupulations skills in R.
+        \item Write simple functions with loops in R.
+        \item Run regressions in R.
+        \item Visulize basic graphs in R. 
+    \end{itemize}
+\end{itemize}
+
+\section*{Before Class}
+\begin{itemize}
+    \item Download and Install R and R studio on your desktop from this \href{https://posit.co/download/rstudio-desktop/}{website} 
+    \item Get your UCard access to Ruttan:
+    \begin{itemize}
+        \item \href{https://ucard.tc.umn.edu/your-u-card/getting-your-first-u-card}{Get a U card} so you can access the building. 
+        \item Request advanced access to the building (Ruttan Hall): \href{https://docs.google.com/forms/d/e/1FAIpQLScTSUXcENXbf5PBaqZPNW_kaDG2gEaVljUVd8saW4M4IFY3DQ/viewform}{Ruttan Hall Access Request Form}. 
+        \item If you have questions, reach out to Melissa Isle (webe0342@umn.edu)
+    \end{itemize}
+    \item Finish the \href{https://forms.gle/rqeCeCi6PYFNpSbw6}{Survey}.
+    \item Bring your laptop to the class. 
+
+\end{itemize}
+
+
+\section*{Reference}
+There are many excellent references out there. Here are some textbooks or online available notes I suggest you guys read or at least have a PDF version in hand for reference. 
+
+\begin{itemize}
+    \item \href{https://r4ds.had.co.nz/index.html}{R for Data Science} (Personally recommended)
+    \item \href{https://jrnold.github.io/r4ds-exercise-solutions/}{Solutions for the book: R for Data Science}
+    \item \href{https://www.econometrics-with-r.org/index.html}{Introduction to Econometrics with R}
+    \item \href{https://libguides.bates.edu/r/r-for-economics}{R for Economics}
+    \item \href{https://rkabacoff.github.io/datavis/datavis.pdf}{Data Visualization with R: by Rob Kabacoff}
+    \item Matloff, Norman. The art of R programming: A tour of statistical software design. No Starch Press, 2011. 
+    \begin{itemize}
+        \item This is the one that Programming for Econometrics Class will be using and mostly used for previous R Review Class.
+        \item PDF version available through UMN Library or you can find it online
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Syntax Cheat Sheet}
+\begin{itemize}
+    \item \hyperlink{https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf}{Data Wrangling
+with dplyr and tidyr}
+    \item \href{https://web.mit.edu/hackl/www/lab/turkshop/slides/r-cheatsheet.pdf}{Basic}
+    \item \href{https://www.beoptimized.be/pdf/R_Data_Transformation.pdf}{data.table} 
+    \item \href{https://nyu-cdsc.github.io/learningr/assets/data-transformation.pdf}{dplyr}
+\end{itemize}
+
+\section*{Exercise}
+To learning coding better, we all need practice more. So, we will have several exercises both in-class and after-class. They are \textbf{optional} and are only designed to help you improve your level of understanding. 
+\begin{itemize}
+    \item I will provide a typed answer key to all exercise I assigned with R Markdown (.rmd) code. You are free to use my code as a template for yourself.
+    \item My teaching goal is to make sure everyone can finish the in-class exercises. If possible, we will spend couple minitues every class to go over the after-class exercise as a review first.   
+    
+    \end{itemize}
+
+
+\section*{Class Style}
+We will code together and I will expalain the code while we are coding them. We will have a 5 mintues break every hour. 
+
+\section*{Tentative Class Schedule}
+
+\begin{tabularx}{\textwidth}{l|X}
+\toprule
+Date: & Tasks \\\midrule\\
+Before Class: & Install the R, R studio and required libabry\\\\
+8/14/2023     &      Workflow; Other necessary coding/study tools for PhD studies. Introduction to R: dataframe and R-studio interface. \\\\
+8/15/2023                & Data Manupulation and Data Cleaning: tidyverse, data.table\\\\
+8/16/2023          & Functions, loops, and Simulations. \\\\
+8/17/2022               &   Econometrics with R:aer \\\\
+8/18/2022               & Data Visulization: ggplot2\\
+\bottomrule
+\end{tabularx}
+
+
+
+
+
+
+
+\end{document}
+
