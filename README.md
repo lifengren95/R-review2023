@@ -4,8 +4,8 @@ This is the home repository for the R-review class for incoming Ph.D. students i
 
 ## Syllabus
 
-* You can find the Syllabus here in [PDF](https://github.com/lfr00154/R-review2023/blob/main/syllabus.pdf) format. 
-* You are free to use this [tex](https://github.com/lfr00154/R-review2023/blob/main/syllabus.tex) file as a LaTex template for yourself to learn more about LaTex.
+* You can find the Syllabus here in [PDF](https://github.com/lfr00154/R-review2023/blob/8ba9ba6d2108ba6c7db39e7d1df0fbe95722aacc/syllabus/syllabus.pdf) format. 
+* You are free to use this [tex](https://github.com/lfr00154/R-review2023/blob/8ba9ba6d2108ba6c7db39e7d1df0fbe95722aacc/syllabus/syllabus.tex) file as a LaTex template for yourself to learn more about LaTex.
 
 ## Data
 
