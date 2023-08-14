@@ -1,0 +1,1267 @@
+---
+title: "Lecture 1: R-Review-2023"
+author: "Lifeng Ren"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    highlight: tango
+    df_print: paged
+    mathjax: local
+    self_contained: false
+    number_sections: true
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    code_folding: hide
+---
+
+# Introduction 
+
+In this section, we are going to learn:
+
+- Basic data types in R 
+
+- Matrix/Linear Algebra calculation in R
+
+- Basic data structures in R
+
+- Basic data access and results print
+
+
+# Data Types
+
+| Data Type  | Description                                                  | Example                           | Check Function      |
+|------------|--------------------------------------------------------------|-----------------------------------|---------------------|
+| numeric    | General number, can be integer or decimal.                   | `5.2`, `3L` (the `L` makes it integer) | `is.numeric()`     |
+| character  | Text or string data.                                         | `"Hello, R!"`                     | `is.character()`    |
+| logical    | Boolean values.                                              | `TRUE`, `FALSE`                   | `is.logical()`      |
+| integer    | Whole numbers.                                               | `2L`, `100L`                      | `is.integer()`      |
+| complex    | Numbers with real and imaginary parts.                       | `3 + 2i`                          | `is.complex()`      |
+| raw        | Raw bytes.                                                   | `charToRaw("Hello")`              | `is.raw()`          |
+| factor     | Categorical data. Can have ordered and unordered categories. | `factor(c("low", "high", "medium"))` | `is.factor()`    |
+
+The check function above would return `TRUE` or `FALSE`.
+
+We can use several other functions to examine the data type. Most frequent use: `class`(), `length()`
+
+| Function       | Description                                                                                     | Example Usage                    | Sample Output              |
+|----------------|-------------------------------------------------------------------------------------------------|---------------------------------|----------------------------|
+| `typeof()`     | Returns the internal data type of the object (e.g., integer, double, character).                | `typeof(2.5)`                    | "double"                   |
+| `class()`      | Retrieves the class or type of the object, indicating how R should handle it.                   | `class(data.frame())`            | "data.frame"               |
+| `storage.mode()` | Provides the mode of how the object is stored internally (often similar to `typeof()`).       | `storage.mode(2L)`               | "integer"                  |
+| `length()`     | Gives the count of elements in an object. For matrices, it's the product of rows and columns.   | `length(c(1,2,3))`               | 3                          |
+| `attributes()` | Shows any metadata attributes associated with the object (e.g., names, dimensions).            | `attributes(matrix(1:4, ncol=2))`| List with $dim attribute   |
+
+---
+
+## In-Class Exercise: Data Type
+
+**Use `class()`, `length()` and `is.XXX()` to examine the data types**  
+
+a) Copy the following code and run them in the R script->Data Type Section.
+
+```{r, eval=FALSE}
+# For 5.2
+print(paste("Class of 5.2:", class(5.2)))
+print(paste("Length of 5.2:", length(5.2)))
+print(paste("Is it a numeric? ", is.numeric(5.2)))
+
+# For 3L
+print(paste("Class of 3L:", class(3L)))
+print(paste("Length of 3L:", length(3L)))
+print(paste("Is it an integer? ", is.integer(3L)))
+
+# For "Hello, R!"
+print(paste("Class of 'Hello, R!':", class("Hello, R!")))
+print(paste("Length of 'Hello, R!':", length("Hello, R!")))
+print(paste("Is it a character? ", is.character("Hello, R!")))
+
+# For TRUE
+print(paste("Class of TRUE:", class(TRUE)))
+print(paste("Length of TRUE:", length(TRUE)))
+print(paste("Is it a logical? ", is.logical(TRUE)))
+
+# For FALSE
+print(paste("Class of FALSE:", class(FALSE)))
+print(paste("Length of FALSE:", length(FALSE)))
+print(paste("Is it a logical? ", is.logical(FALSE)))
+
+# For 2L
+print(paste("Class of 2L:", class(2L)))
+print(paste("Length of 2L:", length(2L)))
+print(paste("Is it an integer? ", is.integer(2L)))
+
+# For 100L
+print(paste("Class of 100L:", class(100L)))
+print(paste("Length of 100L:", length(100L)))
+print(paste("Is it an integer? ", is.integer(100L)))
+
+# For 3 + 2i
+print(paste("Class of 3 + 2i:", class(3 + 2i)))
+print(paste("Length of 3 + 2i:", length(3 + 2i)))
+print(paste("Is it a complex? ", is.complex(3 + 2i)))
+
+# For charToRaw("Hello")
+raw_value <- charToRaw("Hello")
+print(paste("Class of charToRaw('Hello'):", class(raw_value)))
+print(paste("Length of charToRaw('Hello'):", length(raw_value)))
+print(paste("Is it raw? ", is.raw(raw_value)))
+
+# For factor(c("low", "high", "medium"))
+factor_value <- factor(c("low", "high", "medium"))
+print(paste("Class of the factor:", class(factor_value)))
+print(paste("Length of the factor:", length(factor_value)))
+print(paste("Is it a factor? ", is.factor(factor_value)))
+```
+
+
+# Data Structure
+
+In general R handles the following data structures:
+
+| Data Structure | Description                                         | Creation Function                | Example                                               |
+|----------------|-----------------------------------------------------|---------------------------------|-------------------------------------------------------|
+| Vector         | Holds elements of the same type.                    | `c()`                           | `c(1, 2, 3, 4)`                                       |
+| Matrix         | Two-dimensional; elements of the same type.         | `matrix()`                      | `matrix(1:4, ncol=2)`                                 |
+| Array          | Multi-dimensional; elements of the same type.      | `array()`                       |                                                       |
+| List           | Can hold elements of different types.               | `list()`                        | `list(name="John", age=30, scores=c(85, 90, 92))`     |
+| Data Frame     | Like a table; columns can be different types.       | `data.frame()`                  | `data.frame(name=c("John", "Jane"), age=c(30, 25))`   |
+| Factor         | For categorical data.                              | `factor()`                      | `factor(c("male", "female", "male"))`                  |
+| Tibble         | Part of `tidyverse`; improved data frame.           | `tibble()`, `as_tibble()`       |                                                       |
+| Time Series    | Used for time series data.                         | `ts()`                          |                                                       |
+
+Note: There are multiple ways to create each single data structure, the upper table is only for an example. 
+
+In this class, we are going to focus on four data structures:
+
+- Vector
+
+- Matrix
+
+- List
+
+- Data Frame
+
+## Access to the value
+
+| Data Structure | Description                                              | Example                                      | Result Description                    |
+|----------------|----------------------------------------------------------|----------------------------------------------|---------------------------------------|
+| Vector        | Accessing values by index                                | `v <- c(10, 20, 30, 40); v[2]`               | Gets the second element: 20           |
+| Matrix        | Accessing rows and columns using indices                  | `m <- matrix(1:4, 2, 2); m[1,2]`             | Gets the value in the 1st row, 2nd column: 3  |
+| Data Frame    | Accessing columns by name and rows by index              | `df <- data.frame(x=1:3, y=4:6); df$x`       | Gets the `x` column: 1, 2, 3          |
+|               |                                                          | `df[1, ]`                                    | Gets the first row as a data frame    |
+| List          | Accessing elements by index or name                      | `lst <- list(a=1, b=2, c=3); lst$a`          | Gets the `a` element: 1               |
+|               |                                                          | `lst[[2]]`                                   | Gets the second element: 2            |
+| Array         | Accessing elements using indices in each dimension       | `arr <- array(1:8, dim=c(2,2,2)); arr[1,2,2]`| Accessing value in the given indices  |
+| Factor        | Accessing levels and values                              | `f <- factor(c("low", "high", "medium")); levels(f)` | Gets the levels of the factor |
+
+## Vectors
+
+
+### Exercise: Vectors {.tabset}
+
+* Part (a) is for in-class use. Part (b) and Challenge Task are for your own practice at home.
+
+* Please do the exercise first and then check the solution. 
+
+---
+
+#### Problem Statement
+
+**Question 1: Basic Vector Creation**
+
+**(a) In-class:**
+Create a numeric vector named ages that contains the ages of five friends: 21, 23, 25, 27, and 29.
+
+**(b) Take-home:**
+Create a character vector named colors with the values: "red", "blue", "green", "yellow", and "purple".
+
+---
+
+**Question 2: Accessing Vector Elements**
+
+**(a) In-class:** 
+Print the age of the third friend from the ages vector.
+
+**(b) Take-home:**
+Print the last color in the colors vector without using its numeric index.
+
+---
+
+**Question 3: Vector Operations**
+
+**(a) In-class:**
+Add 2 years to each age in the ages vector.
+
+**(b) Take-home:**
+Combine the ages and colors vectors into a single vector named combined. Print this new vector.
+
+---
+
+**Question 4: Vector Filtering**
+
+**(a) In-class:**
+From the ages vector, filter and print ages less than 27.
+
+**(b) Take-home:**
+From the colors vector, find and print colors that have the letter "e" in them.
+
+---
+
+**Challenge Task!**
+
+**(a) In-class:**
+Reverse the order of the colors vector. (Hint: Think about how you might use the seq() function or indexing.)
+
+**(b) Take-home:**
+Using a loop (advanced), print each color from the colors vector with a statement: "My favorite color is [color]". (Replace [color] with the actual color from the vector.)]
+
+---
+
+#### Solution
+**Basic Vector Creation**
+   
+```{r, echo=TRUE}
+ages <- c(21, 23, 25, 27, 29)
+print(ages)
+colors <- c("red", "blue", "green", "yellow", "purple")
+print(colors)
+```
+
+**Accessing Vector Elements**
+
+```{r, echo=TRUE}
+#(a)
+third_age <- ages[3]
+print(third_age)
+
+#(b)
+last_color <- tail(colors, n=1)
+print(last_color)
+```
+
+
+**Vector Operations**
+
+```{r, echo=TRUE}
+#(a)
+ages <- ages + 2
+print(ages)
+
+#(b)
+combined <- c(ages, colors)
+print(combined)
+```
+
+**Vector Filtering**
+
+```{r, echo=TRUE}
+#(a)
+young_ages <- ages[ages < 27]
+print(young_ages)
+
+
+#(b)
+e_colors <- colors[grepl("e", colors)]
+print(e_colors)
+```
+
+
+**Challenge Task!**
+
+```{r, echo=TRUE}
+#(a)
+reversed_colors <- colors[rev(seq_along(colors))]
+print(reversed_colors)
+
+
+#(b)
+for (color in colors) {
+  cat("My favorite color is", color, "\n")
+}
+```
+
+---
+
+
+## Matrix
+
+For the matrix data structure, you need to know three things:
+
+- How to create a new Matrix
+
+- How to do Matrix/Linear Algebra Operations
+
+- How to access the Matrix specific cell. 
+
+- Review the Appendix: Matrix Operations for more information 
+
+---
+
+
+### How to create a new Matrix
+
+To create a matrix in R, you can use the `matrix()` function. Here's an example:
+
+```{r, eval=TRUE}
+# Create a matrix from a vector with 3 rows and 2 columns
+my_matrix <- matrix(1:6, nrow = 3, ncol = 2)
+my_matrix
+```
+
+In the above example, the sequence `1:6` generates a vector containing numbers from 1 to 6. This is then used to fill a matrix with 3 rows and 2 columns.
+
+---
+
+### How to do Matrix/Linear Algebra Operations
+
+Matrix operations in R are straightforward. You can use common arithmetic operations (+, -, *, /) for element-wise operations or use specific functions for matrix-specific operations.
+
+For instance, matrix multiplication (a common operation in linear algebra) can be done using the `%*%` operator:
+
+```{r, eval=TRUE}
+# Create two matrices
+A <- matrix(c(1, 2, 3, 4), nrow=2)
+B <- matrix(c(2, 0, 1, 3), nrow=2)
+
+# Matrix multiplication
+result <- A %*% B
+result
+```
+
+**Note on Matrix Operators:**
+
+The difference between `*` and `%*%` can be illustrated with an example:
+
+Let's say we have two matrices:
+
+```r
+mat1 = matrix(c(1, 2, 3, 4), nrow=2)
+mat2 = matrix(c(2, 0, 1, 3), nrow=2)
+```
+
+Using `*`, we get element-wise multiplication:
+
+```r
+mat1 * mat2
+```
+
+This will give:
+
+```
+     [,1] [,2]
+[1,]    2    3
+[2,]    0   12
+```
+
+Using `%*%`, we get standard matrix multiplication:
+
+```r
+mat1 %*% mat2
+```
+
+This will give:
+
+```
+     [,1] [,2]
+[1,]    4    6
+[2,]   10   12
+```
+
+Thus, `*` multiplies corresponding elements of the matrices, whereas `%*%` performs matrix multiplication as defined in linear algebra.
+
+
+Here, matrices `A` and `B` are multiplied together to get the `result` matrix.
+
+---
+
+### How to access the Matrix specific cell
+
+You can access a specific cell of a matrix by using the row and column indices. Here's how you can do it:
+
+```{r, eval=TRUE}
+# Using the previous matrix, let's access the element at the 2nd row and 1st column
+element <- my_matrix[2, 1]
+element
+```
+
+The value in the second row and first column of `my_matrix` is extracted and stored in the `element` variable.
+
+---
+ 
+
+
+### Exercise: Basic Matrix Algebra Calculation {.tabset}
+
+#### **In-class Exercise on R Vectors and Matrix Operations**
+
+---
+
+**Question 1: Mathematical Functions**
+
+**(a) In-class:**
+
+Given the sequence `seq1 <- c(3, 4, 12, 16, 5)`, calculate:
+
+1. Square root of each element.
+2. Absolute value after subtracting 7 from each element.
+3. Natural logarithm of each element.
+
+**(b) Take-home:**
+
+Given the sequence `seq2 <- c(8, 14, 7, 5, 9)`, calculate:
+
+1. Factorial of each element.
+2. The exponential value of each element.
+3. Trigonometric sine of each element.
+
+---
+
+**Question 2: Basic Statistics**
+
+**(a) In-class:**
+
+Given the sequence `data1 <- c(2, 4, 6, 8, 10)`, calculate:
+
+1. Mean value.
+2. Median value.
+3. Standard deviation.
+
+**(b) Take-home:**
+
+Given the sequence `data2 <- c(3, 5, 8, 9, 12)`, calculate:
+
+1. Variance.
+2. Minimum and maximum values.
+3. The 1st quantile (25th percentile).
+
+---
+
+**Question 3: Matrix Calculation**
+
+**(a) In-class:**
+
+Given the matrices:
+
+```r
+matA = matrix(c(2, 3, 1, 5), nrow=2)
+matB = matrix(c(1, 0, 2, 4), nrow=2)
+```
+
+1. Perform matrix addition between `matA` and `matB`.
+2. Perform element-wise multiplication between `matA` and `matB`.
+3. Transpose `matA`.
+
+**(b) Take-home:**
+
+1. Perform matrix multiplication between `matA` and `matB`.
+2. Calculate the determinant of `matA`.
+3. Find the eigenvalues of `matA`.
+
+---
+
+**Challenging Question:**
+
+Given the matrices:
+
+```r
+matX = matrix(c(4, 3, 2, 1), nrow=2)
+matY = matrix(c(1, 2, 3, 4), nrow=2)
+```
+
+1. Prove or disprove: The matrix product of `matX` and `matY` is commutative. (i.e., show whether `matX %*% matY` is equal to `matY %*% matX` or not).
+
+---
+
+
+#### Solution
+
+**Answer Keys for the In-class Exercise on R Vectors and Matrix Operations**
+
+---
+
+**Question 1: Mathematical Functions**
+
+**(a) In-class:**
+
+Given the sequence `seq1 <- c(3, 4, 12, 16, 5)`:
+
+1. Square root of each element: 
+    ```{r}
+    seq1 <- c(3, 4, 12, 16, 5)
+    sqrt(seq1)
+    ```
+
+
+2. Absolute value after subtracting 7 from each element: 
+
+    ```{r}
+    abs(seq1 - 7)
+    ```
+
+3. Natural logarithm of each element:
+    ```{r}
+    log(seq1)
+    ```
+
+**(b) Take-home:**
+
+Given the sequence `seq2 <- c(8, 14, 7, 5, 9)`:
+
+1. Factorial of each element: 
+    ```{r}
+    seq2 <- c(8, 14, 7, 5, 9)
+    factorial(seq2)
+    ```
+
+2. The exponential value of each element: 
+    ```{r}
+    exp(seq2)
+    ```
+
+3. Trigonometric sine of each element:
+    ```{r}
+    sin(seq2)
+    ```
+
+---
+
+**Question 2: Basic Statistics**
+
+**(a) In-class:**
+
+Given the sequence `data1 <- c(2, 4, 6, 8, 10)`:
+
+1. Mean value: 
+    ```{r}
+    data1 <- c(2, 4, 6, 8, 10)
+    mean(data1)
+    ```
+
+2. Median value: 
+    ```{r}
+    median(data1)
+    ```
+
+3. Standard deviation: 
+    ```{r}
+    sd(data1)
+    ```
+
+**(b) Take-home:**
+
+Given the sequence `data2 <- c(3, 5, 8, 9, 12)`:
+
+1. Variance:
+    ```{r}
+    data2 <- c(3, 5, 8, 9, 12)
+    var(data2)
+    ```
+
+2. Minimum and maximum values: 
+    ```{r}
+    min(data2)
+    ```
+
+    ```{r}
+    max(data2)
+    ```
+
+3. The 1st quantile (25th percentile):
+    ```{r}
+    quantile(data2, 0.25)
+    ```
+    
+---
+
+**Question 3: Matrix Calculation**
+
+**(a) In-class:**
+
+Given the matrices:
+
+```{r}
+matA = matrix(c(2, 3, 1, 5), nrow=2)
+matB = matrix(c(1, 0, 2, 4), nrow=2)
+```
+
+1. Matrix addition between `matA` and `matB`: 
+    ```{r}
+    matA + matB
+    ```
+ 
+
+2. Element-wise multiplication between `matA` and `matB`: 
+    ```{r}
+    matA * matB
+    ```
+
+
+3. Transpose `matA`: 
+    ```{r}
+    t(matA)
+    ```
+
+
+**(b) Take-home:**
+
+1. Matrix multiplication between `matA` and `matB`: 
+    ```{r}
+    matA %*% matB
+    ```
+
+
+2. Determinant of `matA`: 
+    ```{r}
+    det(matA)
+    ```
+
+3. Eigenvalues of `matA`: 
+    ```{r}
+    eigen(matA)$values
+    ```
+
+---
+
+**Challenging Question:**
+
+Given the matrices:
+
+```{r}
+matX = matrix(c(4, 3, 2, 1), nrow=2)
+matY = matrix(c(1, 2, 3, 4), nrow=2)
+```
+
+1. Matrix product of `matX` and `matY` versus `matY` and `matX`: 
+    ```{r}
+    matX %*% matY
+    ```
+
+
+    ```{r}
+    matY %*% matX
+    ```
+
+    As these results are not equal, the matrix product is not commutative for `matX` and `matY`.
+
+--- 
+
+## List
+
+
+Lists in R are a type of data structure that allow you to store elements of different types (e.g., numbers, strings, vectors, and even other lists). Here's a comprehensive tutorial on using lists in R:
+
+---
+
+### How to create a new List
+
+To create a list in R, you can use the `list()` function. Here's how:
+
+```{r, eval=TRUE}
+# Create a list containing a number, a character string, and a vector
+my_list <- list(age = 25, name = "John", scores = c(85, 90, 95))
+my_list
+```
+
+The above code creates a list `my_list` with three elements: an age, a name, and a vector of scores.
+
+---
+
+### How to modify and add elements to a List
+
+You can modify an existing list element or add a new element by using the `[[ ]]` operator.
+
+```{r, eval=TRUE}
+# Modify the age
+my_list[[1]] <- 26
+
+# Add a new element, address
+my_list$address <- "123 R Street"
+
+my_list
+```
+
+In this example, the age is modified, and a new element `address` is added to the list.
+
+---
+
+### How to access elements in a List
+
+To access elements in a list, you can use either the `[[ ]]` operator or the `$` operator:
+
+```{r, eval=TRUE}
+# Access the name using double square brackets
+person_name <- my_list[[2]]
+
+# Access scores using the dollar sign
+test_scores <- my_list$scores
+
+person_name
+test_scores
+```
+
+Here, the second element of `my_list` (name) is accessed using `[[ ]]`, and the scores are accessed using `$`.
+
+---
+
+### How to remove elements from a List
+
+You can remove an element from a list by setting it to `NULL`:
+
+```{r, eval=TRUE}
+# Remove the address element
+my_list$address <- NULL
+
+my_list
+```
+
+The element `address` is removed from the list in this example.
+
+---
+
+Remember, lists are versatile and can hold heterogeneous data, making them crucial for various applications in R, especially when you need to organize and structure diverse data types.
+
+
+### Exercise: List {.tabset}
+
+#### Questions
+
+---
+
+**Question 1: Creating and Modifying Lists**
+
+**(a) In-class:**
+
+1. Create a list named `student_info` containing the following elements:
+   - `name`: "Alice"
+   - `age`: 20
+   - `subjects`: a vector with "Math", "History", "Biology"
+   
+   Display the created list.
+
+**(b) Take-home:**
+
+2. Add two more elements to the `student_info` list:
+   - `grades`: a vector with scores 90, 85, 88 corresponding to the subjects.
+   - `address`: "123 Main St"
+
+   Display the updated list.
+
+---
+
+**Question 2: Accessing and Analyzing List Elements**
+
+**(a) In-class:**
+
+1. From the `student_info` list, extract and print:
+   - The name of the student.
+   - The subjects they are studying.
+
+**(b) Take-home:**
+
+2. Calculate and display:
+   - The average grade of the student using the `grades` element from the list.
+   - The number of subjects the student is studying.
+
+---
+
+**Question 3: Nested Lists**
+
+**(a) In-class:**
+
+1. Create a nested list named `school_info` with the following structure:
+   - `school_name`: "Greenwood High"
+   - `students`: a list containing two elements:
+     - `student1`: the `student_info` list you created in Question 1.
+     - `student2`: a new list with `name` as "Bob", `age` as 22, and `subjects` with "Physics", "Math", "English".
+   
+   Display the created nested list.
+
+**(b) Take-home:**
+
+2. Add a new student, `student3`, to the `students` list in `school_info` with your own details. Display the updated `school_info` list.
+
+---
+
+**Challenging Question:**
+
+Given the `school_info` list:
+
+1. Write a function named `get_average_grade` that takes in the `school_info` list and a student name as arguments. The function should return the average grade for the given student. If the student does not exist in the list or has no grades, return an appropriate message. Test your function with `student1`, `student2`, and another name not in the list.
+
+---
+
+#### Solution
+
+
+**Question 1: Creating and Modifying Lists**
+
+**(a) In-class:**
+
+```{r}
+# Creating the student_info list
+student_info <- list(
+  name = "Alice",
+  age = 20,
+  subjects = c("Math", "History", "Biology")
+)
+
+# Displaying the created list
+student_info
+```
+
+**(b) Take-home:**
+
+```{r}
+# Adding more elements to the list
+student_info$grades <- c(90, 85, 88)
+student_info$address <- "123 Main St"
+
+# Displaying the updated list
+student_info
+```
+
+---
+
+**Question 2: Accessing and Analyzing List Elements**
+
+**(a) In-class:**
+
+```{r}
+# Extracting and printing the name and subjects
+student_name <- student_info$name
+student_subjects <- student_info$subjects
+
+student_name
+student_subjects
+```
+
+**(b) Take-home:**
+
+```{r}
+# Calculating the average grade
+average_grade <- mean(student_info$grades)
+
+# Counting the number of subjects
+num_subjects <- length(student_info$subjects)
+
+average_grade
+num_subjects
+```
+
+---
+
+**Question 3: Nested Lists**
+
+**(a) In-class:**
+
+```{r}
+# Creating the nested list school_info
+school_info <- list(
+  school_name = "Greenwood High",
+  students = list(
+    student1 = student_info,
+    student2 = list(name = "Bob", age = 22, subjects = c("Physics", "Math", "English"))
+  )
+)
+
+# Displaying the created nested list
+school_info
+```
+
+**(b) Take-home:**
+
+```{r}
+# Adding student3 to the students list
+school_info$students$student3 <- list(name = "Charlie", age = 23, subjects = c("Chemistry", "Music", "Art"))
+
+# Displaying the updated school_info list
+school_info
+```
+
+---
+
+**Challenging Question:**
+
+```{r}
+# Function to get the average grade of a student
+get_average_grade <- function(school_info, student_name) {
+  student_data <- school_info$students[[student_name]]
+  if (!is.null(student_data) && !is.null(student_data$grades)) {
+    return(mean(student_data$grades))
+  } else {
+    return(paste("No grades found for", student_name))
+  }
+}
+
+# Testing the function
+get_average_grade(school_info, "student1")
+get_average_grade(school_info, "student2")
+get_average_grade(school_info, "John")
+```
+
+
+
+
+## Data Frame
+
+
+A data frame is a table-like structure that stores data in rows and columns. Each column in a data frame can be of a different data type (e.g., numeric, character, factor), but all elements within a column must be of the same type. This makes data frames ideal for representing datasets.
+
+### Creating a Data Frame
+
+Data frames can be created using the `data.frame()` function.
+
+```{r}
+# Example
+students <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Age = c(20, 21, 19),
+  Grade = c("A", "B", "A")
+)
+
+print(students)
+```
+
+### Accessing Data in Data Frames (Indexing)
+
+In R, data frames are similar to tables in that they store data in rows and columns. Each row represents an observation and each column a variable. Indexing in data frames refers to accessing specific rows, columns, or cells of the data frame.
+
+#### By Column Name
+
+You can access the data of a specific column using the `$` operator or double square brackets.
+
+```{r}
+# Creating a sample data frame
+df <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Age = c(20, 21, 19),
+  Grade = c("A", "B", "A")
+)
+
+# Accessing the 'Name' column using the `$` operator
+names <- df$Name
+print(names)
+
+# Accessing the 'Age' column using double square brackets
+ages <- df[["Age"]]
+print(ages)
+```
+
+#### By Column Index
+
+You can also access a column by its numeric index.
+
+```{r}
+# Accessing the first column
+first_column <- df[,1]
+print(first_column)
+```
+
+#### By Row Index
+
+You can access specific rows using their numeric indices.
+
+```{r}
+# Accessing the first and third rows
+rows_1_and_3 <- df[c(1,3), ]
+print(rows_1_and_3)
+```
+
+#### By Row and Column Indices
+
+You can access a specific cell of the data frame using its row and column indices.
+
+```{r}
+# Accessing the age of the second student
+age_of_second <- df[2, 2]
+print(age_of_second)
+```
+
+#### By Row and Column Names
+
+You can also use row and column names to access specific cells. Note: By default, data frames in R do not have row names unless explicitly set.
+
+```{r}
+# Setting row names for our data frame
+rownames(df) <- c("Student1", "Student2", "Student3")
+
+# Accessing the grade of the third student using row and column names
+grade_of_third <- df["Student3", "Grade"]
+print(grade_of_third)
+```
+---
+
+
+### Modifying a Data Frame
+
+We will talk more about this section in the Data Cleaning Session. But we can see an example on columns manipulation:
+
+
+```{r}
+# Adding a new column
+students$Major <- c("Math", "Biology", "Physics")
+print(students)
+
+# Modifying a column
+students$Age <- students$Age + 1
+print(students)
+
+# Removing a column
+students$Major <- NULL
+print(students)
+```
+
+### Useful Functions for Data Frames
+
+Here are some functions that are particularly useful when working with data frames:
+
+- `head(df)`: Displays the first six rows of the data frame `df`.
+- `tail(df)`: Displays the last six rows of the data frame `df`.
+- `str(df)`: Provides a structured overview of the data frame `df`, showing the data types of each column and the first few entries of each column.
+- `dim(df)`: Returns the dimensions (number of rows and columns) of the data frame `df`.
+- `summary(df)`: Provides a statistical summary of each column in the data frame `df`.
+
+
+
+---
+
+### Load and Save Data Frames in R
+
+Handling data is one of the most essential aspects of data analysis in R. In this section, we'll explore how to load data into R from external sources and save it for future use.
+
+
+#### Read a CSV File
+
+To read a CSV (Comma-Separated Values) file and store its contents as a data frame, use the `read.csv()` function.
+
+```{r, eval=FALSE}
+# Load a CSV file into a data frame
+df <- read.csv("path_to_file.csv")
+
+# Display the first few rows of the data frame
+head(df)
+```
+
+#### Saving to CSV Files
+
+To save a data frame to a CSV file, use the `write.csv()` function.
+
+```{r, eval=FALSE}
+# Save a data frame to a CSV file
+write.csv(df_csv, "path_to_output_file.csv", row.names = FALSE)
+
+# Note: `row.names = FALSE` ensures that row names are not written to the CSV.
+```
+
+
+
+#### Loading Data Frames from Excel Files
+
+To work with Excel files, you might need external packages like `readxl` and `writexl`. Steps should be:
+
+- Install and load the haven package:`install.packages("readxl")`
+- Load the library: `library(readxl)`
+- Use data using: `df_excel <- read_excel("path_to_file.xlsx")`
+
+
+
+#### Loading Data Frames from STATA's `.dta` File
+
+To read .dta files from Stata into R, follow these steps:
+
+- Install and load the haven package:`install.packages("haven")`
+- Load the library: `library(haven)`
+- Use data using: `df_dta <- read_dta("path_to_file.dta")`
+
+
+---
+
+
+
+# Summary
+
+By finishing this lecture, you should be able to:
+
+- Understand the basic data types, and data structures in R
+
+- For Vector, Matrix, List type of data structures, you should know:
+
+  - Access to the value
+  
+  - Basic operations
+  
+- Know how to save, read dataframe. 
+
+---
+
+# Comprehensive Challenge Project
+
+- Do not do this project this week, as I know you are busy
+
+- This is just for your own practice later and someone who is only use the notes to self-study.
+
+
+## Introduction
+
+In this challenge project, you will demonstrate your understanding of the basic data types, structures in R, and manipulate built-in data sets to gain insights. This project will test your proficiency in accessing values in vectors, matrices, lists, and data frames, performing basic operations, and saving & reading data frames.
+
+## Dataset
+
+We will use the built-in dataset `mtcars`. This data was extracted from the 1974 Motor Trend US magazine and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+## Tasks
+
+### Basic Data Types and Structures
+
+**(a) Vectors**
+
+- Create a numeric vector that represents the miles per gallon (mpg) of the `mtcars` dataset.
+- Calculate and print the average mpg.
+- Access and print the mpg of the 10th car.
+
+**(b) Matrices**
+
+- Convert the first 5 rows and 3 columns of the `mtcars` dataset into a matrix.
+- Perform a matrix operation: Multiply the above matrix by 2 and print the result.
+  
+**(c) Lists**
+
+- Create a list that contains:
+  - A numeric vector of horsepower (hp) of the cars.
+  - A character vector of car model names.
+- Access and print the name of the 5th car from the list.
+
+### Data Frame Operations
+
+- Access and print the details of the car with the highest horsepower.
+- Save this single-row data frame to a CSV file named "high_hp_car.csv".
+- Read the "high_hp_car.csv" file back into R and print its contents to confirm the saved data.
+
+### Comprehensive Exploration
+
+- Filter cars that have an mpg greater than 20 and less than 6 cylinders.
+- For these filtered cars, calculate:
+  - The average horsepower.
+  - The median weight.
+  - The number of cars with manual transmission (`am` column value is 1).
+
+### Challenge Question!
+
+- Create a matrix of dimensions 3x3 using the `mpg`, `hp`, and `wt` (weight) columns for the first three cars.
+- Invert this matrix. (Hint: You can use the `solve()` function.)
+- Check if the matrix is singular before inversion (its determinant should not be zero).
+
+## Deliverables
+
+1. An R script containing all the operations performed and any auxiliary functions created.
+2. The "high_hp_car.csv" file.
+3. (Optional) A brief report generated by `rmd` with output (in html PDF file).
+
+## Solutions
+
+You can find the solution [here]().
+
+
+---
+
+# Appendix
+
+## Math Operations
+
+| Function     | Description                                  | Example      | Result               |
+|--------------|----------------------------------------------|--------------|----------------------|
+| `sqrt()`     | Square root                                  | `sqrt(9)`    | 3                    |
+| `abs()`      | Absolute value                               | `abs(-10)`   | 10                   |
+| `log()`      | Natural logarithm (base e)                   | `log(2.72)`  | 1                    |
+| `log10()`    | Logarithm base 10                            | `log10(100)` | 2                    |
+| `exp()`      | Exponential function (base e)                | `exp(1)`     | 2.71828 (approximately e)  |
+| `factorial()`| Factorial of a number                        | `factorial(4)`| 24                  |
+| `^`          | Exponentiation                               | `2^3`        | 8                    |
+| `round()`    | Rounds a number                              | `round(2.678, 2)` | 2.68           |
+| `ceiling()`  | Rounds up to the nearest integer             | `ceiling(2.1)`   | 3                |
+| `floor()`    | Rounds down to the nearest integer           | `floor(2.9)`     | 2                |
+| `trunc()`    | Removes the decimal part                     | `trunc(2.9)`     | 2                |
+| `sin()`, `cos()`, `tan()` | Trigonometric functions         | `sin(pi/2)`      | 1                |
+
+## Basic Statistical Operations
+
+| Function      | Description                               | Example                           | Result              |
+|---------------|-------------------------------------------|-----------------------------------|---------------------|
+| `mean()`      | Arithmetic mean (average)                 | `mean(c(1, 2, 3, 4, 5))`          | 3                   |
+| `median()`    | Median (middle value)                     | `median(c(1, 3, 5, 7, 9))`        | 5                   |
+| `sd()`        | Standard deviation                        | `sd(c(1, 2, 3, 4, 5))`            | 1.5811              |
+| `var()`       | Variance                                  | `var(c(1, 2, 3, 4, 5))`            | 2.5                 |
+| `min()`       | Minimum value                             | `min(c(2, 5, 1, 8, 7))`            | 1                   |
+| `max()`       | Maximum value                             | `max(c(2, 5, 1, 8, 7))`            | 8                   |
+| `range()`     | Range (min and max)                       | `range(c(2, 5, 1, 8, 7))`          | 1, 8                |
+| `sum()`       | Sum of values                             | `sum(c(1, 2, 3, 4, 5))`            | 15                  |
+| `quantile()`  | Quantiles (e.g., quartiles)               | `quantile(c(1, 2, 3, 4, 5), 0.25)` | 1.5                 |
+| `cor()`       | Correlation coefficient                   | `cor(c(1, 2, 3), c(3, 2, 1))`      | -1                  |
+| `cov()`       | Covariance                                | `cov(c(1, 2, 3), c(3, 2, 1))`      | -1                  |
+| `table()`     | Frequency table of factors                | `table(c("A", "A", "B", "B", "C"))`| A: 2, B: 2, C: 1    |
+| `prop.table()`| Proportional table                        | `prop.table(table(c("A", "A", "B", "B", "C")))`| A: 0.4, B: 0.4, C: 0.2 |
+
+## Vector Operations
+
+| Description                                         | Code                                           | 
+|-----------------------------------------------------|------------------------------------------------|
+| Create a sequence                                    | `nums = 2:6`                                   |
+| Generate repeated numbers                           | `sevens = rep(7, times=5)`                     |
+| Repeat a string                                     | `vec_hello = rep("Hello", times = 7)`          |
+| Repeat a string multiple times                      | `vec_hello_20 = rep(vec_hello, times = 2)`     |
+| Sequence with incremental steps                      | `vec_range = seq(from = 3.2, to = 4.5, by = 0.2)` |
+| Initialize a zero vector                             | `outputs = integer(length=7)`                  |
+| Combine vectors                                      | `vec_merge = c(nums, rep(seq(2, 6, 2), 2), c(2, 3, 5), 77, 5:3)` |
+| Check vector length                                  | `length(vec_merge)`                            |
+| Access the first value                               | `vec2[1]`                                      |
+| Omit the first value                                 | `vec2[-1]`                                     |
+| Access elements using an index range                 | `vec2[2:4]`                                    |
+| Select specific elements                             | `vec2[c(2,3,6)]`                               |
+| Add a scalar to a vector                             | `vec2 + 2`                                     |
+| Multiply all elements by a scalar                    | `3 * vec2`                                     |
+| Compute square root                                  | `sqrt(vec2)`                                   |
+| Add two vectors                                      | `vec2 + 3*vec2`                                |
+| Compare vector with a scalar                         | `vec2 > 4`                                     |
+| Check if vector contains an exact value              | `vec2 == 3`                                    |
+| Logical AND condition                                | `vec2 > 3 & vec2!=4`                           |
+| Logical OR condition                                 | `vec2 > 3 | vec2!=5`                           |
+| Filter elements based on a condition                 | `vec2[vec2>4]`                                 |
+| Index of elements that meet a condition              | `which(vec2>6)`                                |
+| Largest element in vector                            | `max(vec2)`                                    |
+| Index of largest element                             | `which.max(vec2)`                              |
+| Smallest element in vector                           | `min(vec2)`                                    |
+| Index of smallest element                            | `which.min(vec2)`                              |
+| Sum of all elements in a vector                      | `sum(vec2)`                                    |
+| Product of all elements in a vector                  | `prod(vec2)`                                   |
+| Mean value of a vector                               | `mean(vec2)`                                   |
+| Median value of a vector                             | `median(vec2)`   
+
+## Matrix Operation
+
+| Operation                   | Symbol/Function                 | Description                                                | Example                               |
+|-----------------------------|--------------------------------|------------------------------------------------------------|---------------------------------------|
+| Matrix Addition             | `+`                            | Element-wise addition of two matrices                      | `mat1 + mat2`                         |
+| Matrix Subtraction          | `-`                            | Element-wise subtraction of two matrices                   | `mat1 - mat2`                         |
+| Element-wise Multiplication | `*`                            | Multiplies each element of one matrix with the corresponding element of another | `mat1 * mat2`                     |
+| Matrix Multiplication       | `%*%`                          | Standard matrix multiplication                             | `mat1 %*% mat2`                       |
+| Matrix Transposition        | `t()`                          | Transposes a matrix (rows become columns and vice versa)   | `t(mat1)`                             |
+| Matrix Inversion            | `solve()`                      | Inverts a matrix (only for square matrices)                | `solve(mat1)`                         |
+| Determinant                 | `det()`                        | Calculates the determinant of a matrix                     | `det(mat1)`                           |
+| Eigenvalues and Eigenvectors| `eigen()`                      | Calculates the eigenvalues and eigenvectors of a matrix    | `eigen(mat1)`                         |
+
+
+
+---
+
+# Reference
+
+* Section 3 of [`R for Graduate Students`](https://bookdown.org/yih_huynh/Guide-to-R-Book/rstudio-set-up.html)
+
+* Dr. Qingxiao Li's notes for R-Review 2020
+
+* Rodrigo Franco's notes for R-Review 2021
