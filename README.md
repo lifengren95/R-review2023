@@ -21,11 +21,12 @@ In this class, I will provide you with an R-script file with Skeleton Code for y
 
 ## Other Materials
 
-* We will not use slides very often except the first lecture. If we use a slide, it is just for transition.
+* We will not use slides very often except the first lecture. If we use a slide, it is just for transition. I upload the source code for the the first lecture in `LaTex-Beamer` [here](welcome_slides), feel free to use it as a template as your own purpose.
 
 * For the rest of the class, our class notes will be provided using `R markdown`, which can be found in this repository and also on Canvas.
 
 * The lectures will be recorded, and the videos will be shared on YouTube with an unlisted link.
+
 
 ## Lecture Structure
 
