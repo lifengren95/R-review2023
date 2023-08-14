@@ -1,0 +1,345 @@
+---
+title: "Lecture 0: R-Review-2023"
+author: "Lifeng Ren"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: yes
+    toc_float: yes
+    toc_depth: 2
+    highlight: tango
+    df_print: paged
+    mathjax: local
+    self_contained: no
+    number_sections: yes
+    fig_width: 7
+    fig_height: 6
+    fig_caption: yes
+    code_folding: hide
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+---
+# Set Up
+
+Let us firstly set up our R programming environment and have an overview of Rstudio.
+
+## Install R and Rstudio
+
+Please follow the instruction of this [link](https://posit.co/download/rstudio-desktop/) to download and install R and Rstudio.
+
+## What is R and Rstudio
+
+-   R is a language and environment for statistical computing and graphics.
+-   RStudio is an integrated development environment for R.
+
+## Go over the Interface of Rstudio
+There are four main windows in Rstudio.
+
+-   The `Console` window
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics("https://drive.google.com/uc?export=view&id=1oCS5ET2HkN95gDVPb286P5Xnx54CM0_3")
+```
+
+-   The `Source` window: Here is place we normally write our code. 
+
+```{r echo=FALSE, out.width='50%'}
+
+knitr::include_graphics("https://drive.google.com/uc?export=view&id=1eZqu_8ALnKUPd884ImZaxJI51oaLCShM")
+```
+
+-   The `Environment / History / Connections / Tutorial` window: Right now it is empty, because we have not loaded any data yet. Here is the place, we can see some data frames, functions, and vectors. 
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics("https://drive.google.com/uc?export=view&id=1JBkdPzxnAx7jEdzdib95tpkpwvzUSUkd")
+
+```
+
+-   The `Files / Plots / Packages / Help / Viewer` window: You can see your file path, plots, etc. in this window. 
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics("https://drive.google.com/uc?export=view&id=1hSPAOECz8k2Nlae6lgOZyUtF6-iBs5aI")
+```
+
+
+
+# Code in R
+
+We will talk more about coding in R in the next few days, and there are lot of things to be care of for any programming language, such us: 
+
+* Workflows set up
+
+* Version Control
+
+* Inline Comments
+
+* ...
+
+Each single topic worth a ton of time to study. However, I will only talk about some basics of each part. And I really wish you can code like a pro. 
+
+So, let us get familiar with the `R Script` and `R Markdown` first, and go over some coding conventions.
+
+## R script
+
+You always need yourself and your collaborator know what is your script about. So, please define some basic information for your `R script`. The following is an example I use. 
+
+```{r}
+
+#____________________________
+#  Script Information----
+#____________________________
+##
+## Script Title: Introduction to R Statistical Software
+##
+## Task: Lecture 0
+##
+## Author: Lifeng Ren
+##
+## Date Last Modified: 2023-08-14
+##
+## Date Created: 2023-08-14
+##
+## Copyright (c) Lifeng Ren, 2023
+## Email: ren00154@umn.edu
+##
+## ___________________________
+##
+## Version: V1.0 (2023-08-14)
+##   
+## Version Notes: Initial Efforts
+## ___________________________
+
+```
+
+You can create RStudio headers (that can be tracked by Rstudio) using the 
+
+* Windows: `Ctrl + Shift + R`
+
+* Mac OS: `Command + Shift + R`
+
+If you test and try a little bit you would find that R can track and of the following format: `#`+ space + `your section name` + `----` (four dashes).
+
+```{r}
+# This is a default R section -------------------------------
+
+#____________________________________________   This is `underscore`
+#  Single has tag will not bold the words----   This is `dash`
+#____________________________________________   This is `underscore`
+
+#__________________________________________
+##  Double hash tag will bold the words----   
+#__________________________________________
+
+```
+
+
+
+
+## R Markdown
+
+Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. `.Rmd` is the abbreviation for `R Markdown` file and for more a complete `R markdown` reference, I personally recommend you this [user guide](https://bookdown.org/yihui/rmarkdown/), and official documentation on <http://rmarkdown.rstudio.com> to know the full picture of R markdown. 
+
+- Short note: For the students taking APEC8211 - APEC8212, you need to hand in the Homework in a typed format. So, learning code in `Rmd` would be good to save you time. 
+
+In this class we are going to go over some very basic knowledge of R Markdown.
+
+-   First, you have the opportunity to edit your page style and header, which is called a [YAML header](https://monashdatafluency.github.io/r-rep-res/yaml-header.html), the following is an example of my own `YAML` header for this class.  
+
+```{r, eval=FALSE}
+---
+title: "Lecture 1: R-Review-2023"
+author: "Lifeng Ren"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    highlight: tango
+    df_print: paged
+    mathjax: local
+    self_contained: false
+    number_sections: true
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    code_folding: hide
+---
+```
+
+In the `Rmd` documentation, we have two main things:
+
+- Markdown Document
+  - Math: use the `$` sign, and the mathematical equations coding style should be the same for LaTex. 
+    - For example: The probability density function of a normal distribution could be typed as: `$f(x)=\frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$`, and `Rmd` will show the and inline output: $f(x)=\frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$. Using `$$` instead of the single `$`, will have the following output.  
+        $$
+          f(x)=\frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}
+        $$
+  - Hyperlink: `[This is the TEXT](This is the LINK)`. Please use the source code of this document to see the example.
+  - For other Markdown coding documentation, please refer to: [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+  
+- Code Chunk (mainly should be R, but can also be customized)
+
+  The code chunk normally starts with `r`, and follows by the chunk name you defined, and then put the chunk environment after it. For example:
+  
+    ```{r chunkexmaple_outer, eval=FALSE}
+    ``` {r chunkexmaple, eval=FALSE}
+    summary(cars)
+    ```  # Example 
+    ```
+
+According to the online documentation of [R Markdown](https://rmarkdown.rstudio.com/lesson-3.html):
+
+
+  - Using `include = FALSE` hides both the code and its output in the final document. However, R Markdown still executes the code in the chunk, making the results accessible to subsequent chunks.
+  - Setting `echo = FALSE` ensures only the code is hidden, while its output remains visible in the final document. It's particularly handy for displaying visuals without the accompanying code.
+  - If you want to hide messages produced by the code, use `message = FALSE`.
+  - To suppress warnings from being displayed in the final output, employ `warning = FALSE`.
+  - Add a caption to images or plots using `fig.cap` = "...".
+  - To skip the execution of a particular code chunk altogether, use `eval = FALSE`.
+  
+  - You can also use `knitr::opts_chunk$set(ANY OPTIONS ABOVE)` like below to set a global environment for all code chunks like this: 
+    ```{r setup, include=TRUE, eval=FALSE}
+    knitr::opts_chunk$set(echo = TRUE)
+    ```
+
+More coding details in `Rmd` should be reviewed using the source code I provided. 
+
+## Coding Style
+
+We are not professional programmer, but coding habitat is super important. Here are some most important parts I think you should be careful of. 
+
+### Naming
+
+- Please name your variables in either the following way, and being consistent:
+
+  * `MyVariable`
+
+  * `my_variable`
+
+  * `my.variable`
+  
+- Do not start a name with numbers like: `2023badname`
+
+- Do not include illegal characters like: `2023/%badname`
+
+### Comments
+
+- Remind yourself and other collaborators with comments in addition to headers.
+
+- For example: 
+
+    ```{r comments_example, eval=FALSE}
+      
+    #__________________________________________
+    ##  Comments Your Code is Important----   
+    #__________________________________________
+    
+    mean(x) # You might not need to generate comments for a simple function
+    
+    
+    # A function to generate the Fibonacci sequence
+    fibonacci <- function(n) { # but for a complex function you need more comments
+      if (n <= 0) {
+        return(integer(0))  # return an empty integer vector for non-positive n
+      } else if (n == 1) {
+        return(0)
+      } else if (n == 2) {
+        return(c(0, 1))
+      } else {
+        fib_sequence <- c(0, 1)
+        for (i in 3:n) {
+          next_element <- sum(tail(fib_sequence, 2))
+          fib_sequence <- c(fib_sequence, next_element)
+      }
+      return(fib_sequence)
+      }
+    }
+
+    # Print the first 10 numbers of the Fibonacci sequence
+    print(fibonacci(10))
+  
+    ```
+
+
+### Most used Built-in Symbols and Command
+
+
+| Symbol | Definition                      | Example |
+|--------|---------------------------------|---------|
+| `=`    | Assigns within functions/datasets. | `fun(arg = value)` |
+| `<-`   | Assigns values to objects/datasets.      | `obj <- 2` (shortcut: Mac: `cmd`+ `-`; Win: `ctrl`+`-`) |
+| `==`   | Checks equality.                | `obj == 2` checks if `obj` equals 2. |
+| `!=`   | Checks inequality.              | `obj != 2` checks if `obj` isn't 2. |
+| `>`    | Greater than.                   | `obj > 2` checks if `obj` is more than 2. |
+| `<`    | Less than.                      | `obj < 2` checks if `obj` is less than 2. |
+| `>=`   | Greater than or equal to.       | `obj >= 2` |
+| `<=`   | Less than or equal to.          | `obj <= 2` |
+| `!`    | NOT (logical negation).         | `!TRUE` returns `FALSE`. |
+| `&`    | AND (element-wise).             | `c(TRUE, FALSE) & c(TRUE, TRUE)` returns `TRUE, FALSE`. |
+| `\|`   | OR (element-wise).              | `c(TRUE, FALSE) \| c(FALSE, FALSE)` returns `TRUE, FALSE`. |
+| `&&`   | AND (first element).            | `TRUE && FALSE` returns `FALSE`. |
+| `\|\|` | OR (first element).             | `TRUE \|\| FALSE` returns `TRUE`. |
+| `%in%` | Tests if in a set.              | `2 %in% c(1, 2, 3)` returns `TRUE`. |
+
+We will see them more often in the next couple sessions.
+
+## In-class exercise
+
+Now, let us go to `Rstudio` and play with what we have learned. 
+
+1. Download the files
+
+  - Create a folder in your local computer for the this class, preferably named as: `R_Review_2023`
+
+  - Download the `lec1` folder/zip file under `R_Review_2023` from Canvas or [GitHub Repository]()
+
+  - Open `lec1_stu.R`: Change the Script Information with your own names, date, ...
+
+2. `print`: "Hello World"
+
+  - In the `source` window, type the following code and select the sentence and click on `Run`
+  
+    ```{r helloworld}
+      print("Hello World!")
+    ```
+  - Type the same thing in the `Console` window, and hit `enter`.
+  
+  - Get Help with any functions like `print`: `?print()`
+  
+    ```{r helloworld_help}
+      ?print()
+    ```
+  
+3. Assign a `char` value to `hello` using the following code and see the change in the `envrionemt` window. Then, print out `hello`.
+
+    ```{r helloworld_char}
+      hello <- "Hello World!"
+      print(hello)
+    ```
+  
+  
+# Summary
+
+In this section, we briefly go through Rstudio with some coding rules/conventions and get a better sense of the Rstudio Interface. After this section, make sure you are comfortable with the following points:
+
+- Interface about Rstudio
+  - How to generate a new `Rscript` and `RMarkdown` file.
+- Coding Rules in R
+  - How to generate the header, comments in `Rscript`
+  - Basic `RMarkdown` syntax
+  - Variables Naming Rules
+  - Frequently used symbols
+
+
+# Reference
+
+* Section 3 of [`R for Graduate Students`](https://bookdown.org/yih_huynh/Guide-to-R-Book/rstudio-set-up.html)
+
+* Dr. Qingxiao Li's notes for R-Review 2020
+
+* Rodrigo Franco's notes for R-Review 2021
+
