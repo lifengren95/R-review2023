@@ -1,0 +1,76 @@
+%% General document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define the ``official'' UMN colors
+\xdefinecolor{GopherMaroon}{HTML}{7A0019}
+\xdefinecolor{GopherGold}{HTML}{FFCC33}
+\xdefinecolor{GopherLightGold}{HTML}{FFDE7A}
+\xdefinecolor{GopherDarkMaroon}{HTML}{5B0013}
+
+
+%% Beamer Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Two Options, uncomment the desired option.
+%   # 1: Navigation bar shows one 'bullet' per slide
+\useoutertheme[subsection=false,shadow]{miniframes}
+%%%% end of # 1
+
+%   # 2: Navigation bar shows one bullet per subsection
+%        Reference: http://tex.stackexchange.com/a/64419/60315
+%\useoutertheme[subsection=false]{miniframes}
+%\usepackage{etoolbox}
+%\makeatletter
+%\patchcmd{\slideentry}{\advance\beamer@xpos by1\relax}{}{}{}
+%\def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax}%
+%\makeatother
+%%%% end of # 2
+
+
+%\useinnertheme{default}
+%\usefonttheme{serif}
+%\usepackage{palatino}
+
+\setbeamerfont{title like}{shape=\scshape}
+\setbeamerfont{frametitle}{shape=\scshape}
+
+\setbeamercolor*{lower separation line head}{bg=GopherMaroon} 
+\setbeamercolor*{normal text}{fg=black,bg=white} 
+\setbeamercolor*{alerted text}{fg=red} 
+\setbeamercolor*{example text}{fg=black} 
+\setbeamercolor*{structure}{fg=black} 
+ 
+\setbeamercolor*{palette tertiary}{fg=GopherDarkMaroon,bg=GopherLightGold} 
+\setbeamercolor*{palette quaternary}{fg=GopherDarkMaroon,bg=GopherLightGold} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Customize template further %%%%%%%%%%%%%%%%%%%%%
+% Add Logo and slide numbers to footer
+\setbeamertemplate{footline}{\parbox{\textwidth}{\vspace*{-15pt}
+                             ~~
+                             \includegraphics[width=0.25\paperwidth]{logoumn} 
+                             \hfill 
+                             \color{gray}{\tiny \insertframenumber\,/\,\inserttotalframenumber~~~}}}
+\setbeamertemplate{navigation symbols}{}    % remove navigation symbols (http://tex.stackexchange.com/a/688)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} 
+\usepackage{booktabs} 
+
+
+\title{Introduction to R statistical Software}
+%\subtitle{SUBTITLE}
+\institute[APEC-UMN] 
+{
+%=========== logos/pictures in the middle=============
+
+%delete \mycomment{} and see for more authors
+    Applied Economics-UMN \\ %author 1 name
+    \texttt{ren00154@umn.edu}\\ % emails
+    \date{\today}
+    \vspace*{0.25cm}
+    \includegraphics[width=1.8cm]{lec/apec.png}
+ 
+}
+
