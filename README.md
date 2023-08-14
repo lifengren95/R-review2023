@@ -17,6 +17,7 @@ In this class, I will provide you with an R-script file with Skeleton Code for y
 
 - `R script` is the place for you to play with the code.
 - `R markdown` and the rendered `html` file are the study guides.
+  - Note: You need to `Knit` the `Rmd` file to re-render the `html` file to open on your own browser: Use Chrome. Don't use Safari. 
 
 ## Other Materials
 
@@ -32,7 +33,7 @@ The following is a tentative lecture structure, and I might adjust it based on t
 
 | Date       | Topics                                                                                       |Links|
 |------------|----------------------------------------------------------------------------------------------|-----|
-| 8/14/2023  | Workflow; Other necessary coding/study tools for PhD studies. Introduction to R: dataframe and R-studio interface.||
+| 8/14/2023  | Lec0: Get familiar with R + Lec1: Data Types and Data Structures in R |[Lecture 0](lec0), [Lecture 1](lec1)|
 | 8/15/2023  | Data Manipulation and Data Cleaning: tidyverse, data.table                                    ||
 | 8/16/2023  | Functions, loops, and Simulations.                                                           ||
 | 8/17/2022  | Econometrics with R: aer                                                                     ||
