@@ -13,14 +13,28 @@ In this class, we will mostly use the public dataset, and I will either send the
 
 ## Code
 
-In this class, I will provide you with an R-script file with Skeleton Code for you to start. And I will also provide an R-markdown file provided with a more detailed explanation. The Quarto-Markdown file (.qmd) file can be found in my github.io repository (here). 
+In this class, I will provide you with an R-script file with Skeleton Code for you to start. And I will also provide an R-markdown file provided with a more detailed explanation. 
+
+- `R script` is the place for you to play with the code.
+- `R markdown` and the rendered `html` file are the study guides.
 
 ## Other Materials
 
-* In the first lecture, we will go over some tools I found helpful for you to start your Ph.D. career. The slide for half of the first lecture will be provided using LaTex-Beamer. You can also feel free to take it for your own use in the future.
+* We will not use slides very often except the first lecture. If we use a slide, it is just for transition.
 
-* For the rest of the class, our class notes will be provided using R markdown, which can be found in this repository and also on my website.
+* For the rest of the class, our class notes will be provided using `R markdown`, which can be found in this repository and also on Canvas.
 
-* Slides will only be used for transition. Notes contain all the important information. 
+* The lectures will be recorded, and the videos will be shared on YouTube with an unlisted link.
 
-* Based on your response, the lectures will or will not be recorded, and the videos will be shared on YouTube with an unlisted link. 
+## Lecture Structure
+
+The following is a tentative lecture structure, and I might adjust it based on the teaching progress:
+
+| Date       | Topics                                                                                       |Links|
+|------------|----------------------------------------------------------------------------------------------|-----|
+| 8/14/2023  | Workflow; Other necessary coding/study tools for PhD studies. Introduction to R: dataframe and R-studio interface.||
+| 8/15/2023  | Data Manipulation and Data Cleaning: tidyverse, data.table                                    ||
+| 8/16/2023  | Functions, loops, and Simulations.                                                           ||
+| 8/17/2022  | Econometrics with R: aer                                                                     ||
+| 8/18/2022  | Data Visualization: ggplot2                                                                  ||
+
