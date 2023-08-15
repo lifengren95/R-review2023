@@ -27,6 +27,8 @@ In this class, I will provide you with an R-script file with Skeleton Code for y
 
 * The lectures will be recorded, and the videos will be shared on YouTube with an unlisted link.
 
+* Useful tools with source code has been published [here](useful_tools).
+
 
 ## Lecture Structure
 
@@ -34,9 +36,9 @@ The following is a tentative lecture structure, and I might adjust it based on t
 
 | Date       | Topics                                                                                       |Links|
 |------------|----------------------------------------------------------------------------------------------|-----|
-| 8/14/2023  | Lec0: Get familiar with R + Lec1: Data Types and Data Structures in R |[Lecture 0](lec0), [Lecture 1](lec1)|
-| 8/15/2023  | Data Manipulation and Data Cleaning: tidyverse, data.table                                    ||
-| 8/16/2023  | Functions, loops, and Simulations.                                                           ||
+| 8/14/2023  | Lec0: Get familiar with R + Lec1: Data Types and Data Structures in R |[Lecture 0](lec0), [Lecture 1](lec1), [Links To be Published]|
+| 8/15/2023  | Control Structures, Functions, Basic Data Manipulation:`base`, `tidyverse`, `data.table`| [Lecture 2](lec2)|
+| 8/16/2023  | Advanced Data Manipulation, Simple Data Visualizaion, Simple Econometrics, First Comprehensive Project.||
 | 8/17/2022  | Econometrics with R: aer                                                                     ||
 | 8/18/2022  | Data Visualization: ggplot2                                                                  ||
 
