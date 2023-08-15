@@ -1,0 +1,1308 @@
+---
+title: "Lecture 2: R-Review-2023"
+author: "Lifeng Ren"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: united
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    highlight: tango
+    df_print: paged
+    mathjax: local
+    self_contained: false
+    number_sections: true
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    code_folding: hide
+---
+
+# Course Updates
+
+- `useful_tools` folder is now available on GitHub
+
+- Solution for lecture 1's project is available: `lec1_projsol.R`
+
+- Any Questions? Comments? Suggestions?
+
+
+# Recap from Yesterday
+
+- Basic data types in R 
+
+- Matrix/Linear Algebra calculation in R
+
+- Basic data structures in R
+
+- Basic data access and results print 
+
+
+# Introduction
+
+In this lecture, we will delve into the following topics:
+
+- Control structures 
+  - Conditional statements (`if`, `else`, `ifelse`)
+  - Loops (`for`, `while`, `repeat`, `break`, `next`)
+  
+- Functions:
+  - Introduction to built-in functions
+  - Writing custom functions
+  - The `apply` family of functions (`lapply`, `sapply`, `tapply`, etc.)
+  
+- Library and Packages
+  
+- Data Manipulation
+  - `base`
+  - `tidyverse`
+  - `data.table`
+  
+Starting from this lecture, we will spend more time to practice and code than lecturing. 
+
+- You need generate the `R script` with your name from scratch for today.
+  - Copy and paste the structure I showed you in `lec1_stu.R`
+  
+Download `lec2.Rmd` and `Knit` it to `html`
+
+
+# Control Structures
+
+
+| Control Structure | Type                   | Description                                                                                       |
+|-------------------|------------------------|---------------------------------------------------------------------------------------------------|
+| `if`              | Conditional Statement  | Executes a block of code only if the specified condition is true.                                 |
+| `else`            | Conditional Statement  | Executes a block of code if the preceding `if` condition is false.                                |
+| `ifelse`          | Conditional Statement  | Vectorized alternative to `if` and `else` statements; useful for applying conditions on vectors.   |
+| `for`             | Loop                   | Iterates over a sequence or vector.                                                               |
+| `while`           | Loop                   | Continuously executes a block of code as long as the specified condition remains true.             |
+| `repeat`          | Loop                   | Executes a block of code indefinitely until a `break` statement is encountered.                   |
+| `break`           | Loop Control           | Exits the loop completely.                                                                       |
+| `next`            | Loop Control           | Skips the rest of the current iteration in a loop and moves to the next iteration.                |
+
+
+## `if` Statement
+
+- Used to execute a block of code only if a condition is true.
+  
+```{r}
+x <- 5
+if (x > 3) {
+  print("x is greater than 3")
+}
+```
+
+## `else` Statement
+
+- Used to execute a block of code if the `if` condition is false.
+
+```{r}
+x <- 2
+if (x > 3) {
+  print("x is greater than 3")
+} else {
+  print("x is not greater than 3")
+}
+```
+
+## `ifelse` Function
+
+- Vectorized alternative to the `if` and `else` statements. Useful when working with vectors.
+
+```{r}
+x <- c(1, 2, 3, 4, 5)
+result <- ifelse(x > 3, "Greater", "Not Greater")
+print(result)
+```
+
+
+## `for` Loop
+
+- Iterates over a sequence or vector.
+
+```{r}
+for (i in 1:5) {
+  print(i)
+}
+```
+
+
+- Advanced Nested `for` Loops: Matrix Iteration with Missing Values
+
+### Example: Populating a 10x10 Matrix with Special Conditions
+
+Let's create a \(10 \times 10\) matrix such that:
+
+1. Each entry \(M_{ij}\) is initially given by \(M_{ij} = i \times j\).
+2. If \(i = j\) (i.e., on the diagonal), the entry is set to `NA` (missing value).
+3. If \(i + j\) is even and \(i \neq j\), halve the value of \(M_{ij}\).
+4. If \(i + j\) is odd and \(i \neq j\), square the value of \(M_{ij}\).
+
+**R Code:**
+```{r}
+# Initializing a 10x10 matrix with zeros
+M <- matrix(0, nrow=10, ncol=10)
+
+# Using nested for loops to populate the matrix with our conditions
+for (i in 1:10) {
+  for (j in 1:10) {
+    
+    # Compute the basic product
+    M[i, j] <- i * j
+    
+    # If we're on the diagonal, set the value to NA
+    if (i == j) {
+      M[i, j] <- NA
+    } 
+    # If the sum of the row and column index is even (and we're off the diagonal)
+    else if ((i + j) %% 2 == 0) {
+      M[i, j] <- M[i, j] / 2
+    }
+    # If the sum of the row and column index is odd (and we're off the diagonal)
+    else if ((i + j) %% 2 == 1) {
+      M[i, j] <- M[i, j]^2
+    }
+  }
+}
+
+# Printing the matrix
+print(M)
+```
+
+---
+
+This example introduces:
+
+- **Matrix Diagonal Manipulation**: By setting diagonal elements to `NA`, we simulate scenarios like missing data in real-world datasets.
+  
+- **Conditional Operations**: By halving or squaring based on the sum of indices, we introduce condition-based operations, which are typical in data manipulations.
+  
+
+### `while` Loop
+
+- Executes as long as a condition remains true.
+
+```{r}
+count <- 1
+while (count <= 5) {
+  print(count)
+  count <- count + 1
+}
+```
+
+## `repeat` Loop
+
+- Executes indefinitely until a `break` statement is encountered.
+
+```{r}
+count <- 1
+repeat {
+  print(count)
+  if (count >= 5) {
+    break
+  }
+  count <- count + 1
+}
+```
+
+## Loop Control with `break` and `next`
+
+- `break`: Exits the loop completely.
+- `next`: Skips the rest of the current iteration and moves to the next one.
+
+```{r}
+for (i in 1:10) {
+  if (i %% 2 == 0) {
+    next
+  }
+  if (i == 9) {
+    break
+  }
+  print(i)
+}
+```
+
+---
+
+## Exercise Session: Deep Dive into Control Structures in R {.tabset}
+
+### Questions
+
+**Question 1: Basic `if` Condition**
+
+**Part (a) - In Class:**  
+Given a number \( x \), write an R script to check if \( x \) is positive. If it is positive, print "Positive".
+
+**Part (b) - Take Home:**  
+Extend the script from part (a) to also check for negative numbers and zeros. If \( x \) is negative, print "Negative", and if \( x \) is zero, print "Zero".
+
+---
+
+**Question 2: Using `ifelse` with Vectors**
+
+**Part (a) - In Class:**  
+Given a vector \( v = \text{c}(2, 4, 6, 8, 10) \), use `ifelse` to classify each number as "Multiple of 3" or "Not a multiple of 3".
+
+**Part (b) - Take Home:**  
+Given a vector \( v \) containing numbers from 1 to 10, use `ifelse` to label each number as "Prime" or "Not Prime".
+
+---
+
+**Question 3: Basic Loop Operations**
+
+**Part (a) - In Class:**  
+Write a `for` loop to print the first five even numbers.
+
+**Part (b) - Take Home:**  
+Use a `while` loop to do the same thing, but this time, print the first five odd numbers.
+
+
+---
+
+**Challenging Exercise: Understanding and Manipulating the Variance-Covariance Matrix**
+
+**Background:**
+
+A variance-covariance matrix provides valuable insights into the relationships between multiple variables in a dataset. By understanding its structure and properties, you can derive important conclusions about the data's underlying patterns.
+
+**Notations:**
+
+- Let \( X \) be a matrix of data where each column represents a variable, and each row represents an observation. 
+- \( n \) is the number of observations.
+- \( p \) is the number of variables.
+- \( X_{ij} \) represents the value of the \( j^{th} \) variable in the \( i^{th} \) observation.
+- \( \bar{X}_j \) represents the mean of the \( j^{th} \) variable.
+
+**Variance:**
+
+The variance of the \( j^{th} \) variable is:
+
+\[
+\text{Var}(X_j) = \frac{1}{n-1} \sum_{i=1}^{n} (X_{ij} - \bar{X}_j)^2
+\]
+
+**Covariance:**
+
+The covariance between the \( j^{th} \) variable and the \( k^{th} \) variable is:
+
+\[
+\text{Cov}(X_j, X_k) = \frac{1}{n-1} \sum_{i=1}^{n} (X_{ij} - \bar{X}_j)(X_{ik} - \bar{X}_k)
+\]
+
+**Variance-Covariance Matrix:**
+
+The variance-covariance matrix \( \Sigma \) for a dataset with \( p \) variables is a \( p \times p \) matrix where each element \( \Sigma_{jk} \) is:
+
+- The variance of the \( j^{th} \) variable if \( j = k \)
+- The covariance between the \( j^{th} \) and \( k^{th} \) variables if \( j \neq k \)
+
+Mathematically, the matrix is represented as:
+
+\[
+\Sigma = 
+\begin{bmatrix}
+\text{Var}(X_1) & \text{Cov}(X_1, X_2) & \dots & \text{Cov}(X_1, X_p) \\
+\text{Cov}(X_2, X_1) & \text{Var}(X_2) & \dots & \text{Cov}(X_2, X_p) \\
+\vdots & \vdots & \ddots & \vdots \\
+\text{Cov}(X_p, X_1) & \text{Cov}(X_p, X_2) & \dots & \text{Var}(X_p) \\
+\end{bmatrix}
+\]
+
+Where the diagonal elements represent variances of each variable, and off-diagonal elements represent the covariances between different pairs of variables.
+
+
+**Task:**
+
+Given the dataframe:
+
+```R
+df <- data.frame(A = c(1, 4, 7), 
+                 B = c(2, 5, 8), 
+                 C = c(3, 6, 9))
+```
+
+Perform the following tasks:
+
+1. Manually compute the variance-covariance matrix for this dataframe, without using `cov()` function.  And then compare your results with the matrix using `cov` function. 
+
+
+
+---
+
+### Solutions
+
+
+**Solution for Question 1: Basic `if` Condition**
+
+**Part (a) - In Class:**  
+```r
+x <- 5  # or any other number
+if (x > 0) {
+  print("Positive")
+}
+```
+
+**Part (b) - Take Home:**  
+```r
+if (x > 0) {
+  print("Positive")
+} else if (x < 0) {
+  print("Negative")
+} else {
+  print("Zero")
+}
+```
+
+---
+
+**Solution for Question 2: Using `ifelse` with Vectors**
+
+**Part (a) - In Class:**  
+```r
+v <- c(2, 4, 6, 8, 10)
+result <- ifelse(v %% 3 == 0, "Multiple of 3", "Not a multiple of 3")
+print(result)
+```
+
+**Part (b) - Take Home:**  
+```r
+v <- 1:10
+is_prime <- function(n) {
+  if (n <= 1) return(FALSE)
+  for (i in 2:sqrt(n)) {
+    if (n %% i == 0) return(FALSE)
+  }
+  return(TRUE)
+}
+result <- ifelse(sapply(v, is_prime), "Prime", "Not Prime")
+print(result)
+```
+
+---
+
+**Solution for Question 3: Basic Loop Operations**
+
+**Part (a) - In Class:**  
+```r
+for (i in 1:5) {
+  print(i * 2)
+}
+```
+
+**Part (b) - Take Home:**  
+```{r}
+count <- 1
+number <- 1
+while (count <= 5) {
+  print(number)
+  number <- number + 2
+  count <- count + 1
+}
+```
+
+---
+
+**Solution for Challanging Question**
+
+Given the dataframe:
+
+```{r}
+df <- data.frame(A = c(1, 4, 7), 
+                 B = c(2, 5, 8), 
+                 C = c(3, 6, 9))
+```
+
+Perform the following tasks:
+
+**Manually compute the variance-covariance matrix**:
+```{r}
+# Calculate the mean of each variable
+mean_values <- c(mean(df$A, na.rm=TRUE), mean(df$B, na.rm=TRUE), mean(df$C, na.rm=TRUE))
+
+# Create a matrix to store the variance-covariance matrix
+myvcov_df <- matrix(0, nrow=3, ncol=3)
+
+# Iterate over each variable
+for (i in 1:3) {
+  # Extract the mean of the current variable
+  mean_i <- mean_values[i]
+  
+  # Iterate over each other variable
+  for (j in 1:3) {
+    # Extract the mean of the other variable
+    mean_j <- mean_values[j]
+    
+    # Calculate the covariance between the current variable and the other variable
+    cov_ij <- sum((df[[i]] - mean_i) * (df[[j]] - mean_j)) / (length(df[[i]]) - 1)
+
+    # Store the covariance in the variance-covariance matrix
+    myvcov_df[i, j] <- cov_ij
+  }
+}
+
+# Print the variance-covariance matrix
+print(myvcov_df)
+```
+
+Then, we use with R's built-in function: `cov`:
+
+```{r}
+# Calculate the variance of each variable
+var_a <- var(df$A)
+var_b <- var(df$B)
+var_c <- var(df$C)
+
+# Calculate the covariance between each pair of variables
+cov_ab <- cov(df$A, df$B)
+cov_ac <- cov(df$A, df$C)
+cov_bc <- cov(df$B, df$C)
+
+# Create the variance-covariance matrix
+vcov_df <- matrix(c(var_a, cov_ab, cov_ac,
+                     cov_ab, var_b, cov_bc,
+                     cov_ac, cov_bc, var_c), nrow=3, ncol=3)
+
+# Print the variance-covariance matrix
+print(vcov_df)
+
+# Or even simpler with one-line code
+print(cov(df))
+```
+---
+
+# Functions
+
+---
+
+## Built-in Functions
+
+We've been using a lot of built-in functions already. For example: `mean()`, `sum()`, `print()`...
+
+
+### Simple Example:
+```{r}
+print(length(c(1,2,3))) #functions inside of functions
+```
+
+### Complex Example with visulization:
+
+- Create a sample data frame containing data on students' names, ages, and scores.
+- Visualize the data:
+  - Plot ages (x-axis) against scores (y-axis).
+  - Label each point with the student's name.
+
+```{r}
+# Create a sample data frame
+students <- data.frame(
+  Name = c("Alice", "Bob", "Charlie", "David", "Eve"),
+  Age = c(20, 21, 19, 22, 21),
+  Score = c(85, 90, 78, 92, 88)
+)
+
+# Plot ages against scores
+plot(students$Age, students$Score, 
+     main="Students' Scores vs. Age", 
+     xlab="Age", 
+     ylab="Score", 
+     pch=19, 
+     col="blue",
+     xlim=c(18,23), 
+     ylim=c(70,100))
+
+# Label each point with the student's name
+text(students$Age, students$Score, labels=students$Name, pos=3, cex=0.8, col="red")
+
+```
+
+---
+
+##  Writing Custom Functions
+
+Custom functions allow users to encapsulate a series of commands into a single command, making code more modular and easier to read.
+
+### How to define a custom function?
+The general format for creating a custom function in R is:
+
+```{r, eval=FALSE}
+function_name <- function(arguments) {
+    # body of the function
+    return(value)  # Optional
+}
+```
+
+#### Simple Example:
+
+```{r}
+# Define a function to calculate the square of a number
+square <- function(x) {
+    return(x^2)
+}
+
+# Use the function
+square(5)  # Expected output: 25
+```
+
+#### Complex Example
+
+```{r}
+# Custom function to process and return results in a data frame
+process_scores <- function(ages, names, scores) {
+    if (length(ages) != length(names) || length(names) != length(scores)) {
+        stop("All input vectors must have the same length!")
+    }
+  
+    # Create a data frame from the input vectors
+    data <- data.frame(Name = names, Age = ages, Score = scores)
+  
+    # Calculate the average score
+    average_score <- mean(scores)
+  
+    # Filter data for people with scores above the average
+    above_average <- data[data$Score > average_score, ]
+  
+    return(above_average)
+}
+
+# Example usage
+names <- c("Alice", "Bob", "Charlie", "David")
+ages <- c(24, 30, 27, 22)
+scores <- c(85, 90, 88, 86)
+
+result <- process_scores(ages, names, scores)
+print(result)
+```
+
+#### Recursive Functions: Tribonacci Sequence
+
+One classic example that's a step up from the Fibonacci sequence is the calculation of the factorial of a number using recursion. However, to make it a tad more challenging while still being understandable, let's create a recursive function to compute the "Tribonacci" sequence. 
+
+The Tribonacci sequence is similar to Fibonacci, but instead of the sum of the last two numbers to get the next number, it takes the sum of the last three. 
+
+Here's the sequence for reference: 
+\[ T_0 = 0, T_1 = 0, T_2 = 1, T_3 = 1, T_4 = 2, T_5 = 4, T_6 = 7, \dots \]
+
+The function to calculate the \(n\)th number in the Tribonacci sequence is:
+
+```{r}
+tribonacci <- function(n) {
+  if (n == 0) {
+    return(0)
+  } else if (n == 1) {
+    return(0)
+  } else if (n == 2) {
+    return(1)
+  } else {
+    return(tribonacci(n-1) + tribonacci(n-2) + tribonacci(n-3))
+  }
+}
+
+# Example usage
+n <- 5
+cat(paste("The", n, "th number in the Tribonacci sequence is:", tribonacci(n)))
+```
+
+The `tribonacci` function works by recursively calling itself to calculate the \(n-1\), \(n-2\), and \(n-3\) values in the sequence until it reaches the base cases where \(n\) is 0, 1, or 2.
+
+
+---
+
+## The Apply Family of Functions
+
+The apply family of functions in R provides a way to avoid explicit loops in code, making operations faster and code more concise.
+
+See a complete syntax table in Appendix. 
+
+### `lapply()`
+
+
+#### Simple Example:
+
+```{r}
+numbers <- list(1:4, 5:8, 9:12)
+lapply(numbers, mean)  # Calculate mean for each list element
+```
+
+#### Complex Example:
+
+```{r}
+# Define a function to calculate mean and standard deviation
+stats <- function(x) {
+    return(list(mean = mean(x), sd = sd(x)))
+}
+
+lapply(numbers, stats)
+```
+
+### `sapply()`
+
+#### Simple Example:
+
+```{r}
+numbers <- 1:5
+sapply(numbers, function(x) x^2)  # Square each element
+```
+
+#### Complex Example:
+
+```{r}
+# Return a matrix with numbers and their squares
+sapply(numbers, function(x) c(original = x, squared = x^2))
+```
+
+### `tapply()`
+
+#### Simple Example:
+
+```{r}
+scores <- c(85, 90, 78, 92, 88)
+groups <- c("A", "B", "A", "B", "A")
+tapply(scores, groups, mean)  # Calculate mean score for each group
+```
+
+#### Complex Example:
+
+```{r}
+# Calculate both mean and standard deviation for each group
+tapply(scores, groups, function(x) list(mean = mean(x), sd = sd(x)))
+```
+
+---
+
+**Note**: There are other functions in the `apply` family such as `mapply()`, `vapply()`, etc. However, the above are some of the most commonly used ones.
+
+## Exercise Session: Deep Dive into Functions in R {.tabset}
+
+
+### Questions
+
+---
+
+**Question 1: Built-in Functions**
+
+**a) In-Class:**  
+Given a vector `x = c(5, 12, 13, 7, 2, 8)`, use a built-in function to find the mean of the vector. What is the mean value?
+
+**b) Take Home:**  
+For the same vector `x`, find the median, the minimum value, and the maximum value. Can you also determine the index positions of the minimum and maximum values?
+
+---
+
+**Question 2: Customized Functions**
+
+**a) In-Class:**  
+Write a function named `area_of_rectangle` that takes in the length and breadth of a rectangle as arguments and returns its area. What is the area of a rectangle with length = 5 units and breadth = 3 units?
+
+**b) Take Home:**  
+Modify the above function to also compute the perimeter of the rectangle. The function should now return both the area and perimeter. Use your modified function to find the area and perimeter of a rectangle with length = 6 units and breadth = 4 units.
+
+---
+
+**Question 3: Apply Family**
+
+**a) In-Class:**  
+Given a list `my_list = list(a = 1:5, b = 6:10, c = 11:15)`, use an appropriate function from the apply family to find the sum of each vector within the list.
+
+**b) Take Home:**  
+For the same list `my_list`, use a function from the apply family to find the mean of each vector within the list. Then, create a named vector where names are the list element names (`a`, `b`, `c`) and the values are the means you just computed.
+
+---
+
+
+
+
+
+
+
+**Question 4: Advanced Custom Function with Recursion (Challenging)**
+
+Create a custom function named `recursive_sum` that takes in a numeric vector. The function should:
+
+1. If the vector has only one element, return the element.
+2. If the vector has more than one element, split the vector into two halves and recursively call `recursive_sum` on each half. Return the sum of the results of the two halves.
+
+Now, within the `analyze_data` function:
+
+1. Compute basic statistics: mean, median, standard deviation, and variance.
+2. Identify outliers: values that are more than 1.5 * Interquartile Range (IQR) above the third quartile or below the first quartile.
+3. Use the `recursive_sum` function to compute the sum of the numeric vector.
+4. Return a list containing the basic statistics, outliers, and the sum computed using recursion.
+
+Test both functions with a vector of your choice.
+
+
+### Solutions
+
+
+
+**a) In-Class:**
+
+```{r}
+x = c(5, 12, 13, 7, 2, 8)
+mean_value = mean(x)
+print(mean_value)
+```
+
+
+**b) Take Home:**
+
+```{r}
+median_value = median(x)
+min_value = min(x)
+max_value = max(x)
+min_index = which.min(x)
+max_index = which.max(x)
+
+print(paste("Median:", median_value))
+print(paste("Minimum Value:", min_value, "at index", min_index))
+print(paste("Maximum Value:", max_value, "at index", max_index))
+```
+
+---
+
+**Solution for Question 2: Customized Functions**
+
+**a) In-Class:**
+
+```{r}
+area_of_rectangle <- function(length, breadth) {
+  return(length * breadth)
+}
+
+area = area_of_rectangle(5, 3)
+print(area)
+```
+
+
+**b) Take Home:**
+
+```{r}
+area_and_perimeter <- function(length, breadth) {
+  area = length * breadth
+  perimeter = 2 * (length + breadth)
+  return(list(Area = area, Perimeter = perimeter))
+}
+
+result = area_and_perimeter(6, 4)
+print(result)
+```
+
+
+---
+
+**Solution for Question 3: Apply Family**
+
+**a) In-Class:**
+
+```{r}
+my_list = list(a = 1:5, b = 6:10, c = 11:15)
+sums = lapply(my_list, sum)
+print(sums)
+```
+
+**b) Take Home:**
+
+```{r}
+means = sapply(my_list, mean)
+named_vector = setNames(means, names(my_list))
+print(named_vector)
+```
+
+---
+
+**Solution for Question 4: Advanced Custom Function with Recursion**
+
+```{r}
+recursive_sum <- function(vec) {
+  if (length(vec) == 1) {
+    return(vec)
+  } else {
+    mid = length(vec) %/% 2
+    left_half = vec[1:mid]
+    right_half = vec[(mid+1):length(vec)]
+    return(recursive_sum(left_half) + recursive_sum(right_half))
+  }
+}
+
+analyze_data <- function(vec) {
+  basic_stats = list(
+    Mean = mean(vec),
+    Median = median(vec),
+    StdDev = sd(vec),
+    Variance = var(vec)
+  )
+  
+  Q1 = quantile(vec, 0.25)
+  Q3 = quantile(vec, 0.75)
+  IQR = Q3 - Q1
+  lower_bound = Q1 - 1.5 * IQR
+  upper_bound = Q3 + 1.5 * IQR
+  
+  outliers = vec[vec < lower_bound | vec > upper_bound]
+  
+  sum_recursive = recursive_sum(vec)
+  
+  return(list(Stats = basic_stats, Outliers = outliers, Sum = sum_recursive))
+}
+
+# Test
+test_vec = c(1,2,3,4,5,6,7,8,9,10,50)
+result = analyze_data(test_vec)
+print(result)
+```
+
+---
+
+# Data Manipulation 
+
+In this section, we are going to learn the data manipulation from libarary `base`, `tidyverse`, and `data.table`.
+
+This is why people like me using R other than STATA to do the first-round of data cleaning and data preparation. You will spend a lot of time on this. So, today is just a start on this. 
+
+## Libraries and Packages
+
+
+In R, the fundamental units of shareable code are called **packages**. A package bundles together code, data, documentation, and tests, and they can be shared with others as a single unit. When a package is used in an R script, it provides new functions, data, and documentation.
+
+What is a Package?
+
+- A collection of R functions, data, and compiled code in a well-defined format.
+- Contains a description of what the package does and R to install and load it.
+- Can be stored in a public repository like CRAN or in a private repository.
+  
+---
+
+### Installing Packages
+
+#### From CRAN
+
+- Most common method.
+- CRAN provides a repository of thousands of R packages.
+
+```{r, eval=FALSE}
+install.packages("name_of_package")
+```
+
+#### From GitHub
+
+- For packages not yet on CRAN.
+- Requires the `devtools` package.
+
+```{r, eval=FALSE}
+# If not already installed
+# install.packages("devtools")
+
+devtools::install_github("username/name_of_package")
+```
+
+---
+
+### Loading Packages
+
+Once a package is installed, it must be loaded into the session to be used.
+
+```{r, eval=FALSE}
+library(name_of_package)
+```
+
+**Note**: `library()` and `require()` are two functions to load packages. `library()` stops if the package is not found, while `require()` gives a warning and returns FALSE.
+
+---
+
+### Updating Packages
+
+Packages are updated frequently. To get the latest version:
+
+```{r, eval=FALSE}
+update.packages()
+```
+
+---
+
+### Dependencies
+
+- Some packages depend on other packages to work.
+- These are automatically installed when you install the main package.
+
+---
+
+### Detaching Packages
+
+If you load several packages, they can mask each other's functions. To prevent this, you can detach packages.
+
+```{r, eval=FALSE}
+detach("package:name_of_package", unload=TRUE)
+```
+
+---
+
+### Checking Installed Packages
+
+To see a list of all your installed packages:
+
+```{r, eval=FALSE}
+installed.packages()[,"Package"]
+```
+
+---
+
+### 9. Useful Tips
+
+- Always look at the package's documentation.
+- Regularly update your packages.
+- Be aware of potential conflicts between packages.
+- Use `sessionInfo()` to get information about the current R session, including loaded packages.
+
+---
+
+**Note**: Using packages in R is essential for effective data analysis. They provide tools and methods that simplify complex tasks and improve the capability of R. Always remember to check the package documentation and keep them updated.
+
+
+
+## Data Manipulation in Base R
+
+The base R system provides a range of functions for manipulating data. While they may not be as intuitive or concise as some of the other packages, understanding base R data manipulation is foundational.
+
+### Subsetting
+
+- Using `[`, `[[`, and `$` to extract subsets of data.
+- Logical indexing for filtering rows or columns.
+
+Example:
+```{r}
+data <- data.frame(Name = c("Alice", "Bob", "Charlie"), Age = c(25, 30, 29))
+subset_data <- data[data$Age > 28, ]
+```
+
+### Sorting
+
+- `order()`: Returns a permutation which rearranges its first argument into ascending or descending order.
+
+Example:
+```{r}
+sorted_data <- data[order(data$Age), ]
+```
+
+### Merging and Joining
+
+- `merge()`: Merges two data frames by common columns or row names.
+
+Example:
+```{r}
+data2 <- data.frame(Name = c("Alice", "Bob"), Score = c(85, 90))
+merged_data <- merge(data, data2, by="Name")
+```
+
+---
+
+## Tidyverse
+
+The Tidyverse is a collection of R packages designed for data science. One of its core packages is `dplyr`, which provides functions for data manipulation.
+
+### Basic Verbs
+
+- `select()`: Choose columns.
+- `filter()`: Choose rows based on values.
+- `mutate()`: Add or modify columns.
+- `arrange()`: Sort the data.
+- `summarize()`: Collapse data into a summary.
+
+### Piping
+
+- `%>%`: Allows for chaining commands, making code more readable.
+
+Example:
+```{r}
+library(dplyr)
+data %>% 
+  filter(Age > 28) %>%
+  arrange(Age)
+```
+
+### Joins
+
+- `left_join()`, `right_join()`, `inner_join()`, and `full_join()`.
+
+Example:
+```{r}
+data %>% left_join(data2, by = "Name")
+```
+
+---
+
+## data.table
+
+The `data.table` package provides an enhanced version of `data.frame` that allows for fast and memory-efficient operations.
+
+### Basic Operations
+
+- `DT[i, j, by]`: A simple syntax where `i` is for row subsetting, `j` for column operations, and `by` for grouping.
+
+Example:
+```{r}
+library(data.table)
+DT <- as.data.table(data)
+DT[Age > 28, .(Name, Age)]
+```
+
+### Joins in data.table
+
+- Joins are done using the same `[.data.table` syntax.
+
+Example:
+```{r}
+DT2 <- as.data.table(data2)
+DT[DT2, on = .(Name)]
+```
+
+### Set Operations
+
+- Functions like `setkey()`, `setorder()`, and others that modify data by reference, making them very fast.
+
+Example:
+```{r}
+setorder(DT, Age)
+```
+
+---
+
+**Note**: While base R provides the foundational understanding of data manipulation, `dplyr` (from Tidyverse) and `data.table` offer more concise and, often, faster approaches. Knowing all three methods can be beneficial depending on the context and specific needs of a data manipulation task.
+
+## Exercise Session: Data Manipulation in R {.tabset}
+
+---
+
+### Questions
+
+**Question 1: Base R - Data Manipulation**
+
+**a) In-Class:**  
+Using the built-in dataset `mtcars`, subset the data to only include cars (`row.names`) that have a miles-per-gallon (`mpg`) value greater than 25 and display the results.
+
+**b) Take Home:**  
+For the same `mtcars` dataset, sort the cars based on their horsepower (`hp`) in descending order. How does the sorted dataset look?
+
+---
+
+**Question 2: Tidyverse (dplyr) - Data Transformation**
+
+**a) In-Class:**  
+Load the `dplyr` package and use the `filter()` function to select rows from the `iris` dataset where `Sepal.Length` is greater than 5 and `Species` is "setosa".
+
+**b) Take Home:**  
+Using the `mutate()` function, add a new column to the `iris` dataset called `Sepal.Ratio` which is the ratio of `Sepal.Length` to `Sepal.Width`. Display the first 10 rows of the updated dataset.
+
+---
+
+**Question 3: data.table - Fast Data Manipulation**
+
+**a) In-Class:**  
+Convert the built-in dataset `airquality` to a `data.table` object. Then, filter the rows to only include observations from the month of May (`Month == 5`).
+
+**b) Take Home:**  
+Group the `airquality` data by `Month` and calculate the average temperature (`Temp`) for each month. Which month had the highest average temperature?
+
+---
+
+**Question 4: Advanced Manipulation (Challenging)**
+
+Using the `diamonds` dataset from the `ggplot2` package:
+
+1. Convert the data to a `data.table` object.
+2. Filter the data to only include diamonds with a `cut` of "Premium" or "Ideal".
+3. Create a new column `price_per_carat` which is the ratio of `price` to `carat`.
+4. For each `color` of diamond, determine the average `price_per_carat`.
+5. Using base R or dplyr, determine which color of diamond, on average, has the highest price per carat.
+
+---
+
+### Solutions
+
+
+**Solution for Question 1: Base R - Data Manipulation**
+
+**a) In-Class:**
+
+```{r}
+subset_mtcars <- mtcars[mtcars$mpg > 25, ]
+print(subset_mtcars)
+```
+
+**b) Take Home:**
+
+```{r}
+sorted_mtcars <- mtcars[order(-mtcars$hp), ]
+print(sorted_mtcars)
+```
+
+---
+
+**Solution for Question 2: Tidyverse (dplyr) - Data Transformation**
+
+**a) In-Class:**
+
+```{r}
+library(dplyr)
+
+filtered_iris <- iris %>%
+  filter(Sepal.Length > 5 & Species == "setosa")
+print(filtered_iris)
+```
+
+**b) Take Home:**
+
+```{r}
+iris_with_ratio <- iris %>%
+  mutate(Sepal.Ratio = Sepal.Length / Sepal.Width)
+print(head(iris_with_ratio, 10))
+```
+
+---
+
+**Solution for Question 3: data.table - Fast Data Manipulation**
+
+**a) In-Class:**
+
+```{r}
+library(data.table)
+
+airquality_dt <- as.data.table(airquality)
+may_data <- airquality_dt[Month == 5]
+print(may_data)
+```
+
+**b) Take Home:**
+
+```{r}
+avg_temp <- airquality_dt[, .(Average_Temp = mean(Temp)), by = Month]
+highest_temp_month <- avg_temp[which.max(Average_Temp)]
+print(highest_temp_month)
+```
+
+---
+
+**Solution for Question 4: Advanced Manipulation**
+
+```{r}
+# Ensure ggplot2 is available for the diamonds dataset
+# install.packages("ggplot2") 
+library(ggplot2)
+library(data.table)
+
+# 1. Convert the data to a data.table object
+diamonds_dt <- as.data.table(diamonds)
+
+# 2. Filter the data
+filtered_diamonds <- diamonds_dt[cut %in% c("Premium", "Ideal")]
+
+# 3. Create a new column
+filtered_diamonds[, price_per_carat := price/carat]
+
+# 4. Determine the average price_per_carat for each color
+avg_price_per_carat <- filtered_diamonds[, .(Average_Price_Per_Carat = mean(price_per_carat)), by = color]
+
+# 5. Determine which color of diamond has the highest average price per carat
+highest_avg_price_color <- avg_price_per_carat[which.max(Average_Price_Per_Carat)]
+print(highest_avg_price_color)
+```
+
+---
+
+# Comprehensive Project for Today
+
+---
+
+## **Project Overview**
+
+In this project, you will be tasked with analyzing a dataset, implementing custom functions, applying control structures, and performing basic data manipulation to derive insights from the data. The objective is to cement the understanding of the core topics covered in the class.
+
+---
+
+## **Dataset**: `mtcars`
+
+The `mtcars` dataset is a built-in dataset in R, which comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+
+---
+
+## **Tasks**
+
+### **Data Exploration and Cleaning**
+
+**Objective:** Familiarize yourself with the dataset and ensure it's clean.
+
+a) Load the `mtcars` dataset and display the first few rows.  
+b) Check for any missing values in the dataset. If there are any, handle them appropriately.
+
+### **Custom Function Creation**
+
+**Objective:** Develop functions that will assist in analyzing the dataset.
+
+a) Create a function named `describe_data` that takes in a column (numeric vector) and returns a list with the mean, median, minimum, and maximum of the column.
+
+b) Create a function named `cyl_distribution` that takes the `mtcars` dataset as input and returns the number of cars for each unique value of the `cyl` column.
+
+### **Control Structures**
+
+**Objective:** Apply control structures to categorize data.
+
+a) Write a loop that iterates over each column in `mtcars`. If the column is numeric, apply the `describe_data` function and print the results.
+
+b) Using an `if-else` construct, categorize cars in `mtcars` based on their `mpg` values:
+- mpg > 20: "Efficient"
+- mpg between 15 and 20: "Moderate"
+- mpg < 15: "Inefficient"
+
+Store these categories in a new column in the dataset named `efficiency`.
+
+### **Data Manipulation**
+
+**Objective:** Use the base R functions, `dplyr` (from Tidyverse), and `data.table` to manipulate the `mtcars` dataset.
+
+a) Using base R, filter out all cars with 4 cylinders (`cyl` column) and order them based on `mpg` in descending order.
+
+b) Using `dplyr`, group the cars by the number of gears (`gear` column) and calculate the average miles per gallon (`mpg`) for each group.
+
+c) Convert the `mtcars` dataset into a `data.table` object and calculate the standard deviation of `hp` (horsepower) for cars grouped by their `efficiency` category.
+
+---
+
+
+# For Tomorrow
+
+- More Data Manipulation, especially using data from outside 
+
+- First Lecture with simulations and econometrics
+
+- Simple Data Visualization: ggplot2
+
+- First in-class Comprehensive Project
+
+
+---
+
+# Appendix
+
+## Apply Family Table Sytax Table
+
+
+| Function | Description                                                                       | Syntax                                        |
+|----------|-----------------------------------------------------------------------------------|-----------------------------------------------|
+| `lapply` | Applies a function to each element of a list/vector and returns a list.           | `lapply(X, FUN, ...)`                         |
+| `sapply` | Similar to `lapply` but tries to simplify the result (e.g., to a vector).        | `sapply(X, FUN, ...)`                         |
+| `vapply` | Similar to `sapply`, but has a specified type of return value for safety.       | `vapply(X, FUN, FUN.VALUE, ...)`              |
+| `apply`  | Applies a function to the rows or columns of a matrix.                            | `apply(X, MARGIN, FUN, ...)`                  |
+| `tapply` | Applies a function to subsets of a vector and returns an array.                  | `tapply(X, INDEX, FUN, ..., default = NA)`    |
+| `mapply` | Multivariate version of `lapply`. Applies a function in parallel over arguments. | `mapply(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE)` |
+| `rapply` | Recursive version of `lapply` for nested lists.                                   | `rapply(object, f, classes, how, ...)`        |
+
+This table provides a concise overview of the `apply` family functions' syntax in R.
+
+
+
+---
+
+# Reference
+
+* Dr. Qingxiao Li's notes for R-Review 2020
+
+* Rodrigo Franco's notes for R-Review 2021
