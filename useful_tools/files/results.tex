@@ -1,0 +1,83 @@
+
+\begin{frame}{Blocks}
+    In this slide, some important text will be
+\alert{highlighted} because it's important.
+Please, don't abuse it.
+
+\begin{block}{Remark}
+Sample text
+\end{block}
+
+\begin{alertblock}{Important theorem}
+Sample text in red box
+\end{alertblock}
+
+\begin{examples}
+Sample text in green box. The title of the block is ``Examples".
+\end{examples}
+\end{frame}
+
+\begin{frame}[fragile]{STATA Table to \LaTeX template}
+\begin{itemize}
+    \item I mainly use Jianxuan Lei's STATA to $\LaTeX$ Template to do this. 
+    \begin{itemize}
+        \item His website on how to do this: \href{https://jianxuan-lei.github.io/posts/2022/10/stata-to-latex/}{here} 
+        \item Next page is a demo
+    \end{itemize}
+
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{STATA Table to \LaTeX template}
+\scriptsize
+%\begin{table}
+\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{A Standard Regression Table}
+\begin{threeparttable}
+
+\begin{tabular}{l*{4}{cccc}}
+\toprule
+                    &\multicolumn{2}{c}{A}                      &\multicolumn{2}{c}{B}                      \\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+                    &\multicolumn{1}{c}{Weight (lbs.)}&\multicolumn{1}{c}{Weight (lbs.)}&\multicolumn{1}{c}{Price}&\multicolumn{1}{c}{Price}\\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+\midrule
+Mileage (mpg)       &    -108.432\sym{***}&     -91.220\sym{***}&     -49.512         &      21.854         \\
+                    &     (9.346)         &     (8.822)         &    (86.156)         &    (74.221)         \\
+\addlinespace
+Car origin          &                     &    -550.052\sym{***}&                     &    3673.060\sym{***}\\
+                    &                     &   (110.908)         &                     &   (683.978)         \\
+\addlinespace
+Weight (lbs.)       &                     &                     &       1.747\sym{**} &       3.465\sym{***}\\
+                    &                     &                     &     (0.641)         &     (0.631)         \\
+\addlinespace
+Constant            &    5328.759\sym{***}&    5125.720\sym{***}&    1946.069         &   -5853.696         \\
+                    &   (206.152)         &   (183.533)         &  (3597.050)         &  (3376.987)         \\
+\midrule
+Time Effects        &          No         &          No         &          No         &          No         \\
+Fixed Effects       &          No         &          No         &          No         &          No         \\
+Observations        &          74         &          74         &          74         &          74         \\
+R-squared           &       0.652         &       0.741         &       0.293         &       0.500         \\
+\bottomrule
+\end{tabular}
+
+    \begin{tablenotes}[flushleft]
+        \item \footnotesize Standard errors in parentheses
+        \item \footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)
+    \end{tablenotes}
+%\end{table}
+\end{threeparttable}
+\end{frame}
+
+
+\begin{frame}{Longer/Wider Table in Presentation?}
+Personal thoughts:
+\begin{itemize}
+    \item Screenshot.
+    \item Key results and a screenshot in the appendix in case someone asks.
+\end{itemize}
+
+
+\end{frame}

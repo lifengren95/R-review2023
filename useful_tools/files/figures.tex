@@ -1,0 +1,58 @@
+\begin{frame}
+\frametitle{Figures with bullet points}
+\setlength{\leftmargini}{0.5em}
+\begin{columns}[c, onlytextwidth]%EVEN SPECIFYING THE c OPTION
+    \begin{column}{.5\textwidth}%
+        \setlength{\partopsep}{0pt}%AND EVEN REMOVING EXTRA itemize SPACE
+        \begin{itemize}
+        \itemsep 1.5em
+            \item First item bla bla bla bla some more text
+            \item second item bla bla bla bla some more text bla bla
+            \item third item bla bla bla bla some more text bla bla bla bla bla bla
+        \end{itemize}
+    \end{column}%
+    \begin{column}{.45\textwidth}
+    \begin{center}
+        \includegraphics[width=\textwidth, height=5.5cm]{example-image}
+    \end{center}
+    \end{column}%
+\end{columns}
+\end{frame}
+
+\begin{frame}{Figures with table}
+
+\begin{itemize}
+\item 1
+\item 2
+\item 3
+\end{itemize}
+
+\begin{block}{test}
+    \smallskip
+  \begin{minipage}{0.58\textwidth}
+    \footnotesize
+    \begin{tabularx}{\textwidth}{@{}RRR@{}}
+        \toprule
+        API hits per month [Mio.] & 
+        Price per month & 
+        Price per year\\
+        \midrule
+      0.1                                   & 2'500                    & 30'000\\
+      0.5                                   & 3'250                    & 39'000\\
+      1                                     & 4'000                    & 48'000\\
+      1.5                                   & 4'750                    & 57'000\\
+      2                                     & 5'500                    & 66'000\\
+      \bottomrule            
+    \end{tabularx}
+  \end{minipage}%
+  \hfill
+    \begin{minipage}{0.38\textwidth}
+      \includegraphics[width=\textwidth]{example-image}
+    \end{minipage}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Wraptext Figure (demo how to search and implement)}
+    
+\end{frame}

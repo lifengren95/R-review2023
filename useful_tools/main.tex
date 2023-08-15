@@ -1,0 +1,110 @@
+\documentclass[11pt]{beamer}
+
+%%%%%%%% theme and color%%%%%%%%
+\mode<presentation> { %try <trans>% to see the diff
+\usetheme{Madrid}
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+}
+
+%%%%%%%% packages %%%%%%
+\usepackage{mathtools}
+\usepackage{algorithm2e}
+\usepackage{longtable}
+\usepackage{threeparttable}  
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+\usepackage{hyperref}
+%%%%%%% new commands %%%%%%
+\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+\newcommand{\mycomment}[1]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%   Start Below         %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\input{config.tex} % Configure your first page
+
+%%%%%%%% Title %%%%%%%%
+%\title[short title on the bottom]{Long title above}
+\title[Overleaf and Beamer]{Using Overleaf and Beamer for Economics Presentation} 
+
+%%%%%%%% authors name %%%%%%%%
+% [authors shown on left bottom corner]{authors shown on main part}
+\author[Lifeng Ren]{Lifeng Ren} 
+
+%Multiple authors? Add an institutional logo? 
+%Use \author[Lifeng Ren, author 2]{LEAVE THIS BLANK}
+%See config.tex
+
+
+\begin{document}
+
+\input{files/pre-slides.tex}
+
+%%%%%%%% slides %%%%%%%%
+\section{Overview} %%%%Define your section name.
+    \input{files/overview.tex}
+
+    \input{files/switch.tex}
+
+\section{Introduction}
+    \input{files/introduction.tex}
+
+
+\section{Theoretical Framework} 
+    \subsection{Theoretical Figures (tikz + Dagitty)}
+    \input{files/tikzfig}
+
+
+\section{Empirical Strategy}
+    \subsection{Mathematical Formula (Mathpix-snip)}
+    \input{files/mathpix.tex}
+
+    \subsection{Code: (``lstlisting'' or ``algorithm2e'')}
+    \input{files/code}
+
+\section{Results}
+    \subsection{STATA Tables (Jianxuan)}
+    \input{files/results.tex}
+
+
+    \subsection{Figures}
+    \input{files/figures.tex}
+
+\section{Others}
+    \subsection{Other Templates (UMN)}
+    \subsection{Version Control (GitHub)}
+
+%%%%%%%% Appendix %%%%%%%%
+
+
+
+%%%%%%%% Thanks %%%%%%%%
+\begin{frame}{Thanks}
+
+
+    \Huge{\centerline{Thank you!}}
+\end{frame}
+%------------------------------------------------
+
+
+%------------------------------------------------
+%------------------------------------------------
+%%%%%%%% reference %%%%%%%%
+%\nocite{*}
+\begin{frame}[allowframebreaks]{Reference}
+\bibliographystyle{unsrt}
+\bibliography{ref.bib}
+\end{frame}
+
+
+
+
+
+\end{document}
