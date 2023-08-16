@@ -1,0 +1,281 @@
+---
+title: "R Reivew 2023 Lecture 3: Comprehensive Project Solution"
+author: "Lifeng Ren"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+# Set up the R coding Chunks
+
+```{r codechunk_setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preparation
+
+0. **Set Working Directory**:
+```{r setwd}
+setwd("~/Library/CloudStorage/Box-Box/Teaching/R_2023/local/lec3/lec3_proj/code")
+```
+
+# Data Exploration and Cleaning:
+
+1. **Generate and Load External Dataset**:
+```{r}
+set.seed(123)
+
+# Number of clients
+n_clients <- 200
+
+# 1. Generate 'name' column
+client_data <- data.frame(name = paste0("Client_", seq(1, n_clients)))
+
+# 2. Generate 'car_bought' column. Initially, just a random sample
+client_data$car_bought <- sample(rownames(mtcars), n_clients, replace = TRUE)
+
+# 3. Generate 'date_purchased' column
+client_data$date_purchased <- sample(seq(as.Date('2015/01/01'), as.Date('2022/01/01'), by="day"), n_clients, replace=TRUE)
+
+# 4. Generate 'income' column
+client_data$income <- runif(n_clients, min=30000, max=150000)
+
+# 5. Ensure richer clients are more likely to buy cars with more horsepower
+# Sort mtcars by horsepower
+sorted_cars <- rownames(mtcars[order(mtcars$hp), ])
+
+# Divide clients into groups and assign cars based on sorted horsepower
+split_rows <- ceiling(n_clients / length(sorted_cars))
+client_data <- client_data[order(-client_data$income), ] # sort by income
+client_data$car_bought <- rep(sorted_cars, times = split_rows)[1:n_clients]
+
+# Show the transformed client_data
+head(client_data)
+
+# Write the data to a CSV
+write.csv(client_data, "../data/raw/client_data.csv", row.names = FALSE)
+```
+
+2. **Load mtcars Dataset and Handle Missing Values**:
+```{r}
+data(mtcars)
+
+mtcars$ID <- rownames(mtcars)
+
+sum(is.na(mtcars))
+```
+
+3. **Visualize and Treat Outliers**:
+```{r}
+boxplot(mtcars$mpg, main="Boxplot of MPG", ylab="Miles Per Gallon")
+```
+
+### Combining Datasets:
+
+4. **Merging the Datasets**:
+```{r}
+
+# Adjust mtcars to have an ID column matching its row names
+mtcars$car_ID <- rownames(mtcars)
+
+# Using base R's merge function
+merged_data_base <- merge(mtcars, client_data, by.x="car_ID", by.y="car_bought")
+
+# Using dplyr's join function
+library(dplyr)
+merged_data_dplyr <- left_join(mtcars, client_data, by=c(car_ID="car_bought"))
+
+```
+
+### Data Reshaping:
+
+5. **Using `data.table`**:
+```{r}
+library(data.table)
+merged_data_table <- as.data.table(merged_data_base)
+write.csv(merged_data_table, "../data/temp/merged_data.csv", row.names = FALSE)
+
+# Summary table
+summary_table <- merged_data_table[, .(mean_mpg = mean(mpg)), by=car_ID]
+print(summary_table)
+
+```
+
+### Data Standardization:
+
+6. **Standardizing Date Columns**:
+```{r}
+client_data$date_purchased <- as.Date(client_data$date_purchased, format="%Y-%m-%d")
+```
+
+7. **Standardizing Text Columns**:
+```{r}
+library(stringr)
+client_data$name <- str_replace(client_data$name, "Client_", "")
+```
+
+### Unique Identifier Check:
+
+8. **Checking for Unique Identifier**:
+```{r}
+length(unique(merged_data_base$name)) == nrow(merged_data_base)
+
+library(eeptools)
+isid(merged_data_base, "name", verbose = TRUE)
+```
+
+### Save Cleaned Data:
+
+9. **Save Cleaned Data**:
+```{r}
+write.csv(merged_data_base, "../data/cleaned/merged_data_base_cleaned.csv", row.names = FALSE)
+```
+
+### Regression Analysis:
+
+10. **Conducting the Regression**:
+```{r}
+model <- lm(mpg ~ wt, data=merged_data_base)
+plot(merged_data_base$wt, merged_data_base$mpg, main="Relationship between Weight and MPG", 
+     xlab="Weight", ylab="Miles Per Gallon", pch=19, col="blue")
+abline(model, col="red")
+```
+
+11. **Matrix Operations with Coefficients**:
+```{r}
+coeff_matrix <- matrix(coefficients(model), ncol=1)
+identity_matrix <- diag(2)
+result_matrix <- identity_matrix %*% coeff_matrix
+print(result_matrix)
+```
+
+12. **Loops for Analysis**:
+```{r}
+coefficients_vector <- c()
+names_vector <- c()  # To store the names of columns that successfully fit a model
+
+# Filter for rows where 'mpg' is not NA
+valid_data <- merged_data_base[!is.na(merged_data_base$mpg), ]
+
+for (column_name in names(valid_data)) {
+  if (column_name != "mpg" && is.numeric(valid_data[[column_name]])) {
+    # Check for complete cases for the current column and 'mpg'
+    complete_rows <- complete.cases(valid_data[, c("mpg", column_name)])
+    if (sum(complete_rows) > 0) {
+      current_model <- lm(mpg ~ ., data=valid_data[complete_rows, c("mpg", column_name)])
+      coefficients_vector <- c(coefficients_vector, coefficients(current_model)[2])
+      names_vector <- c(names_vector, column_name)
+    }
+  }
+}
+
+# Plotting the coefficients
+barplot(coefficients_vector, names.arg=names_vector, las=2, main="Coefficients of Variables", col="lightblue", cex.names=0.7)
+
+```
+
+### Control Structures and Custom Functions:
+
+13. **Using `for` Loop**:
+```{r}
+mean_values <- numeric()
+for(column in colnames(merged_data_base)){
+  if(is.numeric(merged_data_base[[column]])){
+    mean_values <- c(mean_values, mean(merged_data_base[[column]], na.rm = TRUE))
+  }
+}
+names(mean_values) <- colnames(merged_data_base)[sapply(merged_data_base, is.numeric)]
+
+print(mean_values)
+```
+
+14. **Using `ifelse`**:
+```{r}
+merged_data_base$mpg_category <- ifelse(merged_data_base$mpg < 20, "Low", 
+                                 ifelse(merged_data_base$mpg >= 20 & merged_data_base$mpg < 30, "Medium", "High"))
+
+print(table(merged_data_base$mpg_category))
+```
+
+15. **Using `while` Loop**:
+```{r}
+i <- 1
+while(merged_data_base$mpg[i] <= 25){
+  i <- i + 1
+}
+print(paste("The first row where mpg is above 25 is:", i))
+```
+
+### The `apply` Family:
+
+16. **Using `lapply`**:
+```{r}
+range_function <- function(x) c(min=min(x, na.rm=TRUE), max=max(x, na.rm=TRUE))
+ranges <- lapply(merged_data_base[, sapply(merged_data_base, is.numeric)], range_function)
+
+print(ranges)
+```
+
+17. **Using `sapply`**:
+```{r}
+column_types <- sapply(merged_data_base, class)
+print(column_types)
+```
+
+
+### Advanced Data Manipulation:
+
+19. **Using `tidyverse`**:
+```{r}
+# Example operations
+filtered_data <- filter(merged_data_base, mpg > 20)
+selected_data <- select(filtered_data, mpg, wt, gear)
+arranged_data <- arrange(selected_data, desc(wt))
+```
+
+20. **Using `data.table`**:
+```{r}
+library(data.table)
+merged_data_table[, `:=` (new_mpg = mpg * 1.2)]
+```
+
+## Challenging Question:
+
+21. **Advanced Analysis**:
+
+a. **Calculate Car's Age**:
+```{r}
+# Extracting the year from the purchase date
+purchase_year <- as.integer(format(merged_data_base$date_purchased, "%Y"))
+
+# Current year
+current_year <- as.integer(format(Sys.Date(), "%Y"))
+
+# Calculate car's age
+merged_data_base$car_age <- current_year - purchase_year
+```
+
+b. **Custom Function**:
+```{r}
+stat_function <- function(column){
+  c(mean = mean(column, na.rm=TRUE), median = median(column, na.rm=TRUE), sd = sd(column, na.rm=TRUE))
+}
+
+numeric_stats <- sapply(merged_data_base[, sapply(merged_data_base, is.numeric)], stat_function)
+print(numeric_stats)
+```
+
+c. **Control Structures for Analysis**:
+```{r}
+median_weight <- median(merged_data_base$wt, na.rm=TRUE)
+above_median <- merged_data_base[which(merged_data_base$wt > median_weight),]
+below_median <- merged_data_base[which(merged_data_base$wt <= median_weight),]
+
+mean_mpg_above_median <- mean(above_median$mpg, na.rm=TRUE)
+mean_mpg_below_median <- mean(below_median$mpg, na.rm=TRUE)
+
+print(paste("Average mpg for cars above median weight:", mean_mpg_above_median))
+print(paste("Average mpg for cars below or equal to median weight:", mean_mpg_below_median))
+```
+
+---
