@@ -23,7 +23,6 @@ output:
 
 - Lecture 1's link is now available on GitHub
 
-
 - Any Questions? Comments? Suggestions?
 
 
@@ -64,7 +63,7 @@ In this lecture, we will delve into the following topics:
 - Basic Data Analysis and Data Visualization in R
   - Preliminary Data Checks
   - Simple Regression
-  - Results and Visulization
+  - Results and Visualization
   
 - A Comprehensive Project in Class
   - A review for the last 2.5 days
@@ -829,12 +828,12 @@ write.csv(client_data, "../data/raw/client_data.csv", row.names = FALSE)
    - Create a summary table calculating the mean `mpg` for each unique value in `Car_ID`.
 
 4. **Data Standardization**:
-   - Standardize any date columns in "student_data.csv".
+   - Standardize any date columns in `client_data.csv`.
     - Purchased Date: `as.Date()`
     - Client's name: get rid of `Client_` using `str_replace()`
 
 5. **Unique Identifier Check**:
-   - Check if the mock common column is a unique identifier using:
+   - Check if the `name` is a unique identifier using:
     - `isid()`
     - `length(unique(DATA$UID))==nrow(DATA)`
    
