@@ -1,0 +1,39 @@
+---
+title: "R Reivew 2023 Lecture 4: Workbook"
+author: "YOUR NAME HERE"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+# Set up the R coding Chunks
+
+```{r codechunk_setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preparation
+
+0.1 **Set Working Directory**:
+```{r setwd}
+#setwd()
+```
+
+0.2 **Load Necessary Libraries**
+
+```{r}
+library(stats)
+library(ggplot2)
+```
+
+# Matrix Calculation
+
+```{r matrix}
+
+```
+
+---
+
+Generate the R code chunks for yourself for the rest of the lecture!
+
+
