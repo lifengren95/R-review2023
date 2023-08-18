@@ -21,9 +21,9 @@ output:
 
 # Course Updates
 
--   Lecture 2 and Lecture 3's link is now available on GitHub
+-   This is the last class! Thanks for taking this class!
 
--   Lecture 3's project solution has been updated.
+-   I will reorganize the materials for this class including a solution for today's project and send out an email later. 
 
 -   Any Questions? Comments? Suggestions?
 
@@ -44,9 +44,7 @@ In this lecture, we are going to learn more about `ggplot2` to do data visualiza
   - Re-code 
 - Data descriptive statistics:
   - How many observations
-  - Time Frequency
   - Unique Identifier
-  - Missing Values
 - Data Analysis:
   - Run regression
     - Matrix Calculations with loops by given mathematical expression (e.g.: confidence interval)
