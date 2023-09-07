@@ -40,5 +40,5 @@ The following is a tentative lecture structure, and I might adjust it based on t
 | 8/15/2023  | Control Structures, Functions, Basic Data Manipulation:`base`, `tidyverse`, `data.table`| [Lecture 2](lec2), [recordings](https://umn.zoom.us/rec/share/DNRKiX2h0x0AEycLhMdBAA0vb5u2EcZbnjXWncMkM6a45CpQwhtNoTw8XMgLy9TZ.wzBk0BFN1EFR7kuB?startTime=1692122851000)|
 | 8/16/2023  | Advanced Data Manipulation, Simple Data Visualizaion, Simple Econometrics, First Comprehensive Project.|[Lecture 3](lec3), [recordings](https://umn.zoom.us/rec/share/3EtxaGYfwEYklZZ-CB9gKm0SK650d8EsBm2Lj2pxZrrqRFwWDvEwmACnOuCy_yRy.iOoioxiYNGQkKtBb?startTime=1692209066000)|
 | 8/17/2022  | Econometrics Review with R with replication of day 1,2,3's materials.                        |[Lecture 4](lec4)|
-| 8/18/2022  | Data Visualization: ggplot2                                                                  |[Lecture 5](lec5)|
+| 8/18/2022  | Data Visualization: ggplot2; Final Review Project                                            |[Lecture 5](lec5)|
 
