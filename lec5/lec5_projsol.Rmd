@@ -1,0 +1,164 @@
+---
+title: "R Reivew 2023 Lecture 3: Comprehensive Project Workbook"
+author: "YOUR NAME HERE"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r codechunk_setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+# Setup your working directories: `setwd()`
+```{r setwd}
+setwd("~/Library/CloudStorage/Box-Box/Teaching/R_2023/repo/R-review2023/lec5/lec5_proj/code")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(eeptools)
+library(data.table)
+```
+
+
+
+### First-round Data Scanning
+
+#### 4. Load Data
+
+```{r}
+ps2021 <- read_excel("../data/raw/privateschools2021.xlsx", skip = 2)
+head(ps2021)
+```
+
+
+#### 5. Observations and Variables in the Data
+
+```{r}
+dim(ps2021)
+```
+
+There are 3,050 observations and 53 variables in the data.
+
+#### 6. Unique Identifier for the Data
+
+```{r}
+length(unique(ps2021$`CDS Code`)) == nrow(ps2021)
+isid(ps2021, "CDS Code", verbose = TRUE)
+```
+
+The `CDS Code` is a unique identifier for this dataset.
+
+### Data Cleaning
+
+#### 7. Selecting Specific Columns
+
+```{r}
+df_selected <- select(ps2021, County, `CDS Code`, `School Name`, Zip, `School Phone Number`, `School Classification`, `Total Enrollment`, `Full Time Teachers`, `Part Time Teachers`)
+head(df_selected)
+```
+
+#### 8. Renaming Columns
+
+```{r}
+colnames(df_selected) <- str_replace_all(str_to_lower(colnames(df_selected)), " ", "_")
+
+# # Using within():
+# 
+# df_selected <- within(df_selected, {
+#   new_df <- df_selected
+#   names(new_df) <- str_replace_all(str_to_lower(names(new_df)), " ", "_")
+# })
+# 
+# head(df_selected)
+
+
+
+```
+
+#### 9. Text Cleaning
+
+```{r}
+df_selected$school_phone_number <- gsub("-", "", df_selected$school_phone_number)
+head(df_selected)
+```
+
+#### 10. Saving Cleaned Data
+
+```{r}
+write.csv(df_selected, "../data/cleaned/privateschools2021_cleaned.csv")
+```
+
+### Data Analysis
+
+#### 11. Unique School Classification
+
+```{r}
+length(unique(df_selected$school_classification))
+```
+
+There are 34 unique `school_classification` values in the data.
+
+#### 12. Distribution of Schools by Religious Classification
+
+```{r}
+df_selected$school_classification <- ifelse(df_selected$school_classification != "Non-Religious" & df_selected$school_classification != "Other", "Religious", df_selected$school_classification)
+
+ggplot(df_selected, aes(x = school_classification)) +
+  geom_bar(fill = c("skyblue", "salmon", "lightgreen")) +
+  labs(title = "Distribution of Schools by Religious Classification", x = "Classification", y = "Number of Schools")
+```
+
+#### 13. Regression Analysis
+
+```{r}
+model <- lm(total_enrollment ~ full_time_teachers, data = df_selected)
+summary(model)
+```
+
+#### 14. Confidence Interval
+
+```{r}
+# Run the regression model
+model <- lm(total_enrollment ~ full_time_teachers, data = df_selected)
+
+# Extract the coefficient and its standard error
+beta <- coef(model)["full_time_teachers"]
+se_beta <- summary(model)$coefficients["full_time_teachers", "Std. Error"]
+
+# Calculate the confidence interval
+z_star <- 1.96
+lower_bound <- beta - z_star * se_beta
+upper_bound <- beta + z_star * se_beta
+
+# Display the results
+cat("95% Confidence Interval for the coefficient of full_time_teachers:", "\n")
+cat("Lower Bound:", lower_bound, "\n")
+cat("Upper Bound:", upper_bound, "\n")
+
+
+confint(model)
+```
+
+#### 15. Visualizing Regression Results
+
+```{r}
+ggplot(df_selected, aes(x = full_time_teachers, y = total_enrollment)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE) +
+  labs(title = "Regression of Total Enrollment on Full-Time Teachers", x = "Full Time Teachers", y = "Total Enrollment")
+```
+
+---
+
+The regression results suggest that for each additional full-time teacher, the total enrollment is expected to increase by about 6.573 students, holding all else constant. The constant (intercept) represents the estimated total enrollment when the number of full-time teachers is zero. The \( R^2 \) value indicates that approximately 42.2% of the variability in total enrollment can be explained by the number of full-time teachers.
+
+
+
