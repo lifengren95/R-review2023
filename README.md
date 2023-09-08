@@ -1,6 +1,6 @@
 # Introduction to R Statistical Analysis Software
 
-This is the home repository for the R-review class for incoming Ph.D. students in 2023
+This is the home repository for the R-review class for incoming Ph.D. students in 2023.
 
 ## Syllabus
 
@@ -21,13 +21,15 @@ In this class, I will provide you with an R-script file with Skeleton Code for y
 
 ## Other Materials
 
-* We will not use slides very often except the first lecture. If we use a slide, it is just for transition. I upload the source code for the the first lecture in `LaTex-Beamer` [here](welcome_slides), feel free to use it as a template as your own purpose.
+* We will not use slides very often except in the first lecture. If we use a slide, it is just for transition. I upload the source code for the first lecture in `LaTex-Beamer` [here](welcome_slides). Feel free to use it as a template as your own purpose.
 
 * For the rest of the class, our class notes will be provided using `R markdown`, which can be found in this repository and also on Canvas.
 
 * The lectures will be recorded, and the videos will be shared on YouTube with an unlisted link.
 
-* Useful tools with source code has been published [here](useful_tools).
+* Useful tools with source code have been published [here](useful_tools).
+  
+* Lecture notes can also be found on my [personal website](lfr00154.github.io).
 
 
 ## Lecture Structure
