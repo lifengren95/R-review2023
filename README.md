@@ -29,7 +29,7 @@ In this class, I will provide you with an R-script file with Skeleton Code for y
 
 * Useful tools with source code have been published [here](useful_tools).
   
-* Lecture notes can also be found on my [personal website](https://lfr00154.github.io).
+* Lecture notes can also be found on my [personal website](https://www.lifengren.com/lec0.html).
 
 
 ## Lecture Structure
